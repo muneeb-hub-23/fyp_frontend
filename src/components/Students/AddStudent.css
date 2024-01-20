@@ -1,0 +1,67 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+}
+
+html {
+    font-size: 66.2%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+.main_container {
+    min-height: 100vh;
+}
+
+.H {
+    font-size: 2rem;
+    text-align: center;
+    margin-top: 0.2rem;
+    color: rgb(24, 164, 219);
+    font-weight: bolder;
+}
+
+.main_container .form_container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 600px;
+    padding: 1rem;
+    margin: auto;
+
+}
+
+.main_container .form_container form{
+    flex: 1 1 50rem;
+    padding: 1rem;
+}
+.main_container .form_container .form-group {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.main_container .form_container .form-group .form-control {
+    flex: calc(50% - 0.5rem);
+    margin-bottom: 1rem;
+}
+
+.main_container .form_container .form-control,
+.form-select,
+#btn {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .main_container .form_container{
+        max-width: fit-content;
+    }
+    .main_container .form_container .form-group .form-control {
+        flex: 100%;
+    }
+}
+
