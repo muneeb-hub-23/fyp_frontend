@@ -22,15 +22,6 @@ import Error from "./components/Error";
 import PermissionList from "./components/Users/PermissionList";
 import ModifyStu from "./components/Students/ModifyStu";
 import Modification from "./components/Users/Modification";
-import FirstSections from "./components/ViewAttendance/FirstSections";
-import SecondSections from "./components/ViewAttendance/SecondSections";
-import ThirdSections from "./components/ViewAttendance/ThirdSections";
-import FirstSectionA from "./components/ViewAttendance/FirstSectionA";
-import FirstSectionB from "./components/ViewAttendance/FirstSectionB";
-import SecondSectionA from "./components/ViewAttendance/SecondSectionA";
-import SecondSectionB from "./components/ViewAttendance/SecondSectionB";
-import ThirdSectionA from "./components/ViewAttendance/ThirdSectionA";
-import ThirdSectionB from "./components/ViewAttendance/ThirdSectionB";
 import DeleteStudent from "./components/Students/DeleteStudent";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -42,15 +33,6 @@ root.render(
       <Route path="/Dashboard" element={<Dashboard />}> </Route>
       <Route path="/MarkAttendence" element={<MarkAttendence />}> </Route>
       <Route path="/ViewAttendence" element={<ViewAttendence />}></Route>
-      <Route path="/ViewAttendence/FirstSections" element={<FirstSections />} />
-      <Route path="/ViewAttendence/SecondSections" element={<SecondSections />} />
-      <Route path="/ViewAttendence/ThirdSections" element={<ThirdSections />} />
-      <Route path="/ViewAttendence/FirstSections/FirstSectionA" element={<FirstSectionA />} />
-      <Route path="/ViewAttendence/FirstSections/FirstSectionB" element={<FirstSectionB />} />
-      <Route path="/ViewAttendence/SecondSections/SecondSectionA" element={<SecondSectionA />} />
-      <Route path="/ViewAttendence/SecondSections/SecondSectionB" element={<SecondSectionB />} />
-      <Route path="/ViewAttendence/ThirdSections/ThirdSectionA" element={<ThirdSectionA />} />
-      <Route path="/ViewAttendence/ThirdSections/ThirdSectionB" element={<ThirdSectionB />} />
       <Route path="/Reports" element={<Reports />}> </Route>
       <Route path="/Fine" element={<Fine />}> </Route>
 
