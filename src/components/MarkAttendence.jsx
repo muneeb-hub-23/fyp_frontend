@@ -1,104 +1,3 @@
-// import React, { useState } from 'react';
-// import SideBAR from '../components/SideBAR'
-// import axios from 'axios';
-
-// const DeleteFirstA = () => {
-
-// const fulldate = new Date().toISOString().split('T')[0];
-// const [students, setData] = useState({
-//   admission_number: '',
-//   roll_no: '',
-//   student_full_name: '',
-//   joining_date: '',
-//   email: '',
-//   cnic: '',
-//   department: '',
-//   class: '',
-//   section: '',
-//   shift: '',
-//   student_mobile_number: '',
-//   father_full_name: '',
-//   father_mobile_number: '',
-// });
-// const [selectedValue, setSelectedValue] = useState({classn:'1st-year',section:'a',date:fulldate,status:''});
-// const [index, setIndex] = useState(0);
-// const ApiCaller = async () => {
-
-//     try {
-//       const response = await axios.post('http://localhost:80/get-students-list',selectedValue);
-//       setData(response.data);
-//     } catch (error) {
-//       console.log(error);
-//     }
- 
-// }
-// const handleDropdownChange = (event) => {
-//    setSelectedValue({classn:document.getElementById('classn').value,section:document.getElementById('section').value,date:document.getElementById('date').value});
-//    setIndex(0)
-// };
-// ApiCaller();
-// const ApiCaller2 = async () => {
-//   try {
-//     const response = await axios.post('http://localhost:80/mark-attendance',[selectedValue,students[index]]);
-//     // setData(response.data);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
-//   const handlePresent = async (e) => {
-    
-//     setSelectedValue({status:'p'})
-//     ApiCaller2();
-//     if (index<students.length-1){
-//     setIndex(index+1)
-
-//     }
-
-
-//   };
-//   const handleAbsent = async (e) => {
-//     setSelectedValue({status:'a'})
-//     ApiCaller2();
-//     if (index<students.length-1){
-//     setIndex(index+1)
-//     }
-//   };
-//   const handleLeave = async (e) => {
-//     setSelectedValue({status:'l'})
-//     ApiCaller2();
-//     if (index<students.length-1){
-//     setIndex(index+1)
-//     }
-//   };
-
-//   return (
-//         <SideBAR>
-//           <input type="date" name="date" id="date" value={selectedValue.date} onChange={handleDropdownChange}/>
-//     <select id="classn" value={selectedValue.classn} onChange={handleDropdownChange}>
-    
-//                <option value="1st-year">First Year</option>
-//            <option value="2nd-year">Second Year</option>
-//              <option value="3rd-year">Third Year</option>
-//            </select>
-//      <select id="section" value={selectedValue.section} onChange={handleDropdownChange}>
-//        <option value="a">A</option>
-//       <option value="b">B</option>
-//        </select>
-
-//           <h2>Mark Attendance</h2>
-//           <p>Admission Number: {students[index].admission_number}</p>
-//           <p>Roll Number: {students[index].roll_no}</p>
-//           <p>Name: {students[index].student_full_name}</p>
-//           <p>Status: {students[index].present}</p>
-//           <button onClick={()=>{handlePresent(students[index].admission_number)}}>Present</button>
-//           <button onClick={handleAbsent}>Absent</button>
-//           <button onClick={handleLeave}>Leave</button>
-//         </SideBAR>
-//   );
-// };
-
-// export default DeleteFirstA;
 import React, { useState, useEffect } from 'react';
 import SideBAR from '../components/SideBAR';
 import axios from 'axios';
@@ -117,7 +16,7 @@ const DeleteFirstA = () => {
     classn: '1st-year',
     section: 'a',
     date: fulldate,
-    status: 'p',
+    status:''
   });
   const [index, setIndex] = useState(0);
 
@@ -143,20 +42,17 @@ const DeleteFirstA = () => {
   };
 
   const ApiCaller2 = async (props) => {
-    setSelectedValue({ ...selectedValue, status: props });
+    
     try {
-      const response = await axios.post('http://localhost:80/mark-attendance', [
-        selectedValue,
-        students[index],
-      ]);
+      const response = await axios.post('http://localhost:80/mark-attendance', [selectedValue,students[index],props]);
       // setData(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handlePresent = async () => {
-    
+  const handlePresent = () => {
+    setSelectedValue({ ...selectedValue, status: 'p' });
     ApiCaller2('p');
     if (index < students.length - 1) {
       setIndex(index + 1);
@@ -167,8 +63,8 @@ const DeleteFirstA = () => {
     }
   };
 
-  const handleAbsent = async () => {
-    
+  const handleAbsent = () => {
+    setSelectedValue({ ...selectedValue, status: 'a' });
     ApiCaller2('a');
     if (index < students.length - 1) {
       setIndex(index + 1);
@@ -178,7 +74,8 @@ const DeleteFirstA = () => {
     }
   };
 
-  const handleLeave = async () => {
+  const handleLeave = () => {
+    setSelectedValue({ ...selectedValue, status: 'l' });
         ApiCaller2('l');
     if (index < students.length - 1) {
       setIndex(index + 1);
@@ -207,9 +104,9 @@ const DeleteFirstA = () => {
            <p>Roll Number: {students[index].roll_no}</p>
            <p>Name: {students[index].student_full_name}</p>
            <p>Status: {students[index].present}</p>
-           <button onClick={()=>{handlePresent(students[index].admission_number)}}>Present</button>
-           <button onClick={()=>{handleAbsent(students[index].admission_number)}}>Absent</button>
-           <button onClick={()=>{handleLeave(students[index].admission_number)}}>Leave</button>
+           <button style={{height:'60px',width:'150px',backgroundColor:'green'}} onClick={()=>{handlePresent(students[index].admission_number)}}>Present</button>
+           <button style={{height:'60px',width:'150px',backgroundColor:'red'}} onClick={()=>{handleAbsent(students[index].admission_number)}}>Absent</button>
+           <button style={{height:'60px',width:'150px',backgroundColor:'blue'}} onClick={()=>{handleLeave(students[index].admission_number)}}>Leave</button>
     </SideBAR>
   );
 };

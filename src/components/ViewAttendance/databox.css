@@ -2,9 +2,13 @@
     border: 3px solid black;
     width: 20vw;
     height: 25vh;
-    display: inline;
+    display: block;
     background-color: wheat;
     padding: 10px;
     margin: 20px;
     
+}
+.chart{
+    width: 200px;
+    height: 150px;
 }

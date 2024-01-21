@@ -4,6 +4,9 @@ import "../../index.css";
 import { useNavigate } from 'react-router-dom';
 import DataBox from './DataBox';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'jquery/dist/jquery.min.js'
+import 'bootstrap/dist/js/bootstrap.min.js'
 
 const ViewAttendence = () => {
 const [firstyeara,setfirstyeara] = useState({});
@@ -38,20 +41,37 @@ const handleDropdownChange = (event) => {
 
 };
 
-
+const style = {margin:'20px',padding:'5px',border:'1px solid black'}
 
   return (
 
       <SideBAR>
          <input type="date" name="date" id="date1" value={dates.date1} onChange={handleDropdownChange}/>
-        <h1>ViewAttendence</h1>
-        <DataBox total_strength={firstyeara.total_strength} total_present={firstyeara.total_present} total_absent={firstyeara.total_absent} total_leave={firstyeara.total_leave} class={'1st-year'} section={'A'} s/>
-        <DataBox total_strength={firstyearb.total_strength} total_present={firstyearb.total_present} total_absent={firstyearb.total_absent} total_leave={firstyearb.total_leave} class={'1st-year'} section={'B'} s/>
-        <DataBox total_strength={secondyeara.total_strength} total_present={secondyeara.total_present} total_absent={secondyeara.total_absent} total_leave={secondyeara.total_leave} class={'2nd-year'} section={'A'} s/>
-        <DataBox total_strength={secontyearb.total_strength} total_present={secontyearb.total_present} total_absent={secontyearb.total_absent} total_leave={secontyearb.total_leave} class={'2nd-year'} section={'B'} s/>
-        <DataBox total_strength={thirdyeara.total_strength} total_present={thirdyeara.total_present} total_absent={thirdyeara.total_absent} total_leave={thirdyeara.total_leave} class={'3rd-year'} section={'A'} s/>
-        <DataBox total_strength={thirdyearb.total_strength} total_present={thirdyearb.total_present} total_absent={thirdyearb.total_absent} total_leave={thirdyearb.total_leave} class={'3rd-year'} section={'B'} s/>
-
+        <h1 style={{textAlign:'center'}}>ViewAttendence</h1>
+<div className="container">
+  <div className="row">
+<div className='col-lg' style={style}>
+<DataBox class={'1st-year'} section={'A'} data={[firstyeara.total_strength,firstyeara.total_present,firstyeara.total_absent,firstyeara.total_leave]}/>
+</div>
+<div className='col-lg' style={style}>
+<DataBox class={'1st-year'} section={'B'} data={[firstyearb.total_strength,firstyearb.total_present,firstyearb.total_absent,firstyearb.total_leave]}/>
+</div>
+<div className='col-lg' style={style}>
+<DataBox class={'2nd-year'} section={'A'} data={[secondyeara.total_strength,secondyeara.total_present,secondyeara.total_absent,secondyeara.total_leave]}/>
+</div>
+</div>
+<div className="row">
+<div className='col-lg' style={style}>
+<DataBox class={'2nd-year'} section={'B'} data={[secontyearb.total_strength,secontyearb.total_present,secontyearb.total_absent,secontyearb.total_leave]}/>
+</div>
+<div className='col-lg' style={style}>
+<DataBox class={'3rd-year'} section={'A'} data={[thirdyeara.total_strength,thirdyeara.total_present,thirdyeara.total_absent,thirdyeara.total_leave]}/>
+</div>
+<div className='col-lg' style={style}>
+<DataBox class={'3rd-year'} section={'B'} data={[thirdyearb.total_strength,thirdyearb.total_present,thirdyearb.total_absent,thirdyearb.total_leave]}/>
+</div>
+</div>
+</div>
       </SideBAR>
 
   )
