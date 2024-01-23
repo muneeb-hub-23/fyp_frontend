@@ -1,0 +1,26 @@
+.custom{
+    display: block;
+    border: 1px solid black;
+    height: 160px;
+    margin: 50px 5px;
+    color: black;
+    font-size: 5rem;
+    text-align: center;
+    padding-top: 30px;
+}
+.written{
+    color: rgb(39, 32, 32);
+    text-align: center;
+    border: 1px solid black;
+    margin-top: 50px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.present{
+    color: rgb(140, 233, 0);
+}
+.absent{
+    color: red;
+}
+.leave{
+    color: orangered;
+}

@@ -1,14 +1,11 @@
 .databox{
-    border: 3px solid black;
-    width: 20vw;
-    height: 25vh;
-    display: block;
+    border: 1px solid black;
+
+    height: auto;
+    width: auto;
     background-color: wheat;
-    padding: 10px;
-    margin: 20px;
+    padding: 5px;
+    margin: 5px;
     
 }
-.chart{
-    width: 200px;
-    height: 150px;
-}
+
