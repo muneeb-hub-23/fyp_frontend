@@ -4,11 +4,13 @@ import LineChart from './LineChart';
 import BarChart from './BarChart';
 import './dashboard.css'
 import axios from 'axios';
+import CustomBarChart from './customBarChart';
 const Dashboard = () => {
-const [tstrength,setTStrength] = useState({})
-const [tpresent,setPresent] = useState({})
-const [tabsent,setAbsent] = useState({})
-const [tleave,setLeave] = useState({})
+const [tstrength,setTStrength] = useState({strength:0})
+const [tpresent,setPresent] = useState({present:0})
+const [tabsent,setAbsent] = useState({absent:0})
+const [tleave,setLeave] = useState({leaves:0})
+const[lates,setlates] = useState({lates:0})
   const ApiCaller = async ()=>{
     try{
       const response = await axios.post('http://localhost:80/today-ict-strength', []);
@@ -37,76 +39,81 @@ const [tleave,setLeave] = useState({})
   }
   ApiCaller()
   return (
-    <div>
-      <SideBAR>
-        <h1>Dashboard</h1>
-        <div className="container">
-        <div className="row">
-          <table style={{margin:'5px 10px 5px 10pxs'}}>
-            <tr>
-         <td style={{width:'43vw'}}><h3 style={{textAlign:'left'}}>Today ICT</h3></td>
-          <td><h3 style={{textAlign:'left'}}>Top Performing Class</h3></td>
-          <td>
-            <select name="" id="">
-              <option value="today">Today</option>
-              <option value="yesterday">Yesterday</option>
-              <option value="this_week">This Week</option>
-              <option value="last_week">Last Week</option>
-              <option value="this_month">This Month</option>
-              <option value="last_month">Last Month</option>
-              <option value="this_year">This Year</option>
-              <option value="last_year">Last Year</option>
-              <option value="all_time">All Time</option>
-            </select>
-            
-            </td>
-          </tr>
-          </table>
-        <div className='col-lg' style={{width:'30vh',height:'45vh',border:'1px solid black',margin:'10px'}}>
 
-        <div className="row">
+<SideBAR>
 
-        <div className="col-sm center">
-        <h3 className='written'>Total Strength</h3>
-        <div className="custom strength">{tstrength.strength}</div>
-        </div>
+<div className="container">
+<div className="row piece">
+<div className='col-lg'>
 
-        <div className="col-sm center">
-        <h3 className='written'>Total Present</h3>
-        <div className="custom present">{tpresent.present}</div>
-        </div>
+<div className="row">
 
-        <div className="col-sm center">
-        <h3 className='written'>Total Absent</h3>
-        <div className="custom absent">{tabsent.absent}</div>
-        </div>
+<div className="col-sm center">
+<h3 className='written'>Total Strength</h3>
+<div className="custom strength">{tstrength.strength}</div>
+</div>
 
-        <div className="col-sm center">
-        <h3 className='written'>Total Leaves</h3>
-        <div className="custom leave">{tleave.leaves}</div>
-        </div>
+<div className="col-sm center">
+<h3 className='written'>Total Present</h3>
+<div className="custom present">{tpresent.present}</div>
+</div>
 
-        </div>
+<div className="col-sm center">
+<h3 className='written'>Total Absent</h3>
+<div className="custom absent">{tabsent.absent}</div>
+</div>
+
+<div className="col-sm center">
+<h3 className='written'>Total Leaves</h3>
+<div className="custom leave">{tleave.leaves}</div>
+</div>
+
+<div className="col-sm center">
+<h3 className='written'>Total Lates</h3>
+<div className="custom late">{lates.lates}</div>
+</div>
+
+</div>
 
 
 
 
-          
-        </div>
   
-        <div className='col-lg' style={{width:'30vh',height:'45vh',border:'1px solid black',margin:'10px'}}>
-        <BarChart data={[50,30,80,40,40,70]}/>
-        </div>
-        </div>
-        <div className="row">
-        <div className='col-lg'>
-        <LineChart />
-        </div>
-        </div>
-        </div>
+</div>
+</div>
+<div className="row piece">
 
-      </SideBAR>
-    </div>
+<div className='aabbcc'>
+<CustomBarChart data={['First-Year-A',10,8,1,1,0]}/>
+</div>
+
+<div className='aabbcc'>
+<CustomBarChart data={['First-Year-B',10,4,4,0,2]}/>
+</div>
+
+<div className='aabbcc'>
+<CustomBarChart data={['Second-Year-A',10,1,6,2,1]}/>
+</div>
+
+</div>
+<div className="row piece">
+
+<div className='aabbcc'>
+<CustomBarChart data={['Second-Year-B',10,7,1,1,1]}/>
+</div>
+
+<div className='aabbcc'>
+<CustomBarChart data={['Third-Year-A',10,8,0,0,2]}/>
+</div>
+
+<div className='aabbcc'>
+<CustomBarChart data={['Third-Year-B',10,3,4,1,2]}/>
+</div>
+
+</div>
+</div>
+</SideBAR>
+
   );
 };
 

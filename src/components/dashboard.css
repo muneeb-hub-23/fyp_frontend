@@ -1,26 +1,62 @@
+*{
+    font-family: Helvetica, sans-serif;
+}
+.aabbcc{
+    display: block;
+    margin: auto;
+    padding: 5px;
+    width: 300px;
+    height: 40vh;
+    
+}
 .custom{
     display: block;
-    border: 1px solid black;
-    height: 160px;
-    margin: 50px 5px;
+    height: 120px;
+    margin: 10px 5px;
     color: black;
     font-size: 5rem;
     text-align: center;
-    padding-top: 30px;
+    padding-top: 10px;
 }
 .written{
+    width: 100%;
     color: rgb(39, 32, 32);
     text-align: center;
-    border: 1px solid black;
     margin-top: 50px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.strength{
+    border-bottom: 3px solid rgb(39, 32, 32);
 }
 .present{
     color: rgb(140, 233, 0);
+    border-bottom: 3px solid rgb(140, 233, 0);
 }
 .absent{
     color: red;
+    border-bottom: 3px solid red;
 }
 .leave{
-    color: orangered;
+    color: rgb(4, 166, 253);
+    border-bottom: 3px solid rgb(4, 166, 253);
+}
+.late{
+    color: rgba(253, 170, 4, 0.652);
+    border-bottom: 3px solid rgba(253, 170, 4, 0.652);
+}
+.piece{
+    text-align: center;
+    width: 95%;
+    margin: 5px auto;
+    height: 30vh;
+    display: flex; /* Use flex container */
+    flex-direction: column; /* Vertical direction, adjust as needed */
+    align-items: stretch; /* Stretch children vertically */
+    justify-content: stretch; /* Stretch children horizontally */
+
+}
+.ddr{
+    width: 15%;
+}
+h4{
+    text-align: justify;
 }

@@ -84,6 +84,16 @@ const DeleteFirstA = () => {
       conf ? (console.log("you choosed to stay on this page")):(navigate('/'))
     }
   };
+  const handleLate = () => {
+    setSelectedValue({ ...selectedValue, status: 'lt' });
+        ApiCaller2('lt');
+    if (index < students.length - 1) {
+      setIndex(index + 1);
+    }    else{
+      let conf = confirm("All students attendance Marked, Do You Want to Stay on This Page");
+      conf ? (console.log("you choosed to stay on this page")):(navigate('/'))
+    }
+  };
 
   return (
     <SideBAR>
@@ -107,6 +117,7 @@ const DeleteFirstA = () => {
            <button style={{height:'60px',width:'150px',backgroundColor:'green'}} onClick={()=>{handlePresent(students[index].admission_number)}}>Present</button>
            <button style={{height:'60px',width:'150px',backgroundColor:'red'}} onClick={()=>{handleAbsent(students[index].admission_number)}}>Absent</button>
            <button style={{height:'60px',width:'150px',backgroundColor:'blue'}} onClick={()=>{handleLeave(students[index].admission_number)}}>Leave</button>
+           <button style={{height:'60px',width:'150px',backgroundColor:'gold'}} onClick={()=>{handleLate(students[index].admission_number)}}>Late</button>
     </SideBAR>
   );
 };
