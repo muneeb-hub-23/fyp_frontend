@@ -169,7 +169,7 @@ const data = {
         label: data1[0],
         data: [data1[1],data1[2],data1[3],data1[4],data1[5]],
         borderColor: 'black',
-        backgroundColor: ['black','green','red','blue','gold'],
+        backgroundColor: ['black','rgb(140, 233, 0)','red','rgb(4, 166, 253)','rgba(253, 170, 4, 0.652)'],
       }
     ]
   };

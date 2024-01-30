@@ -4,6 +4,7 @@ import LineChart from './LineChart';
 import BarChart from './BarChart';
 import './dashboard.css'
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import CustomBarChart from './customBarChart';
 const Dashboard = () => {
 const [tstrength,setTStrength] = useState({strength:0})
@@ -11,6 +12,7 @@ const [tpresent,setPresent] = useState({present:0})
 const [tabsent,setAbsent] = useState({absent:0})
 const [tleave,setLeave] = useState({leaves:0})
 const[lates,setlates] = useState({lates:0})
+const[data,setData] = useState([[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]])
   const ApiCaller = async ()=>{
     try{
       const response = await axios.post('http://localhost:80/today-ict-strength', []);
@@ -36,8 +38,28 @@ const[lates,setlates] = useState({lates:0})
     }catch (err){
       console.log(err)
     }
+    try{
+      const response = await axios.post('http://localhost:80/today-ict-lates', []);
+      setlates(response.data)
+      
+    }catch (err){
+      console.log(err)
+    }
+    try{
+      const response = await axios.post('http://localhost:80/dashboard-charts', []);
+      setData(response.data)
+      
+    }catch (err){
+      console.log(err)
+    }
   }
   ApiCaller()
+  var daba1 = data[0]
+  var daba2 = data[1]
+  var daba3 = data[2]
+  var daba4 = data[3]
+  var daba5 = data[4]
+  var daba6 = data[5]
   return (
 
 <SideBAR>
@@ -84,31 +106,39 @@ const[lates,setlates] = useState({lates:0})
 <div className="row piece">
 
 <div className='aabbcc'>
-<CustomBarChart data={['First-Year-A',10,8,1,1,0]}/>
-</div>
+<Link to={'/expand-bar-chart/1st-year/a'}>
+<CustomBarChart data={['First-Year-A',daba1[0],daba1[1],daba1[2],daba1[3],daba1[4]]} />
+</Link></div>
 
 <div className='aabbcc'>
-<CustomBarChart data={['First-Year-B',10,4,4,0,2]}/>
-</div>
+<Link to={'/expand-bar-chart/1st-year/b'}>
+<CustomBarChart data={['First-Year-B',daba2[0],daba2[1],daba2[2],daba2[3],daba2[4]]}/>
+</Link></div>
 
 <div className='aabbcc'>
-<CustomBarChart data={['Second-Year-A',10,1,6,2,1]}/>
-</div>
+
+<Link to={'/expand-bar-chart/2nd-year/a'}>
+<CustomBarChart data={['Second-Year-A',daba3[0],daba3[1],daba3[2],daba3[3],daba3[4]]}/>
+</Link></div>
 
 </div>
 <div className="row piece">
 
 <div className='aabbcc'>
-<CustomBarChart data={['Second-Year-B',10,7,1,1,1]}/>
-</div>
+<Link to={'/expand-bar-chart/2nd-year/b'}>
+<CustomBarChart data={['Second-Year-B',daba4[0],daba4[1],daba4[2],daba4[3],daba4[4]]}/>
+</Link></div>
 
 <div className='aabbcc'>
-<CustomBarChart data={['Third-Year-A',10,8,0,0,2]}/>
-</div>
+<Link to={'/expand-bar-chart/3rd-year/a'}>
+<CustomBarChart data={['Third-Year-A',daba5[0],daba5[1],daba5[2],daba5[3],daba5[4]]}/>
+</Link></div>
 
 <div className='aabbcc'>
-<CustomBarChart data={['Third-Year-B',10,3,4,1,2]}/>
-</div>
+
+<Link to={'/expand-bar-chart/3rd-year/b'}>
+<CustomBarChart data={['Third-Year-B',daba6[0],daba6[1],daba6[2],daba6[3],daba6[4]]}/>
+</Link></div>
 
 </div>
 </div>

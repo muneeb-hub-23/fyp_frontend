@@ -23,6 +23,7 @@ import PermissionList from "./components/Users/PermissionList";
 import ModifyStu from "./components/Students/ModifyStu";
 import Modification from "./components/Users/Modification";
 import DeleteStudent from "./components/Students/DeleteStudent";
+import ExpandBarChart from "./components/expand-bar-chart";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -35,6 +36,7 @@ root.render(
       <Route path="/ViewAttendence" element={<ViewAttendence />}></Route>
       <Route path="/Reports" element={<Reports />}> </Route>
       <Route path="/Fine" element={<Fine />}> </Route>
+      <Route path="/expand-bar-chart/:class1/:section" element={<ExpandBarChart />}> </Route>
 
       {/* Classes */}
       <Route path="/classes" >
