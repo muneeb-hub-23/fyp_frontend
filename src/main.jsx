@@ -24,12 +24,14 @@ import ModifyStu from "./components/Students/ModifyStu";
 import Modification from "./components/Users/Modification";
 import DeleteStudent from "./components/Students/DeleteStudent";
 import ExpandBarChart from "./components/expand-bar-chart";
+import ExpandMarkAttendance from './components/expand-mark-attendance'
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   
   <Router>
     <Routes>
+      <Route path="/ExpandMarkAttendance" element={<ExpandMarkAttendance />}> </Route>
       <Route path="/" element={<Dashboard />}> </Route>
       <Route path="/Dashboard" element={<Dashboard />}> </Route>
       <Route path="/MarkAttendence" element={<MarkAttendence />}> </Route>

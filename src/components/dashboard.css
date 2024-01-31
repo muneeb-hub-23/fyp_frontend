@@ -19,14 +19,17 @@
 }
 .aabbccddee span{
     font-size: 1.5rem;
-    margin: 10px;
+    margin: 5px;
     padding: 5px;
-    width: 200px;
+    width: 10%;
     display: inline-block;
+}
+.aabbccddee .xxx{
+    width: 50%;
 }
 .aabbccddee ul li{
     border: 1px solid black;
-    margin: 20px;
+    margin: 10px 20px;
 }
 .aabbccddee ul li:hover{
     background-color: greenyellow;
