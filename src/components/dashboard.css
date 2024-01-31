@@ -9,6 +9,29 @@
     height: 40vh;
     
 }
+.aabbccdd{
+    display: block;
+    margin: auto;
+    padding: 5px;
+    width: 600px;
+    height: 400px;
+    
+}
+.aabbccddee span{
+    font-size: 1.5rem;
+    margin: 10px;
+    padding: 5px;
+    width: 200px;
+    display: inline-block;
+}
+.aabbccddee ul li{
+    border: 1px solid black;
+    margin: 20px;
+}
+.aabbccddee ul li:hover{
+    background-color: greenyellow;
+}
+
 .custom{
     display: block;
     height: 120px;

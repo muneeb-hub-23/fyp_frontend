@@ -19,6 +19,8 @@ const DeleteFirstA = () => {
     status:''
   });
   const [index, setIndex] = useState(0);
+  const [students1, setStudents1] = useState([{ admission_number: 1, roll_no: 1, student_full_name: 'hello', status1: 'p' }]);
+
 
   useEffect(() => {
     const ApiCaller = async () => {
@@ -45,12 +47,22 @@ const DeleteFirstA = () => {
     
     try {
       const response = await axios.post('http://localhost:80/mark-attendance', [selectedValue,students[index],props]);
-      // setData(response.data);
+      setData(response.data);
     } catch (error) {
       console.log(error);
     }
+
   };
 
+  const ApiCaller3 = async ()=>{
+    try {
+      const response = await axios.post('http://localhost:80/student-is-listing', [selectedValue.classn, selectedValue.section]);
+      setStudents1(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  ApiCaller3();
   const handlePresent = () => {
     setSelectedValue({ ...selectedValue, status: 'p' });
     ApiCaller2('p');
@@ -97,7 +109,8 @@ const DeleteFirstA = () => {
 
   return (
     <SideBAR>
-                 <input type="date" name="date" id="date" value={selectedValue.date} onChange={handleDropdownChange}/>
+      <div>
+                 {/* <input type="date" name="date" id="date" value={selectedValue.date} onChange={handleDropdownChange}/> */}
      <select id="classn" value={selectedValue.classn} onChange={handleDropdownChange}>
     
                <option value="1st-year">First Year</option>
@@ -113,11 +126,38 @@ const DeleteFirstA = () => {
            <p>Admission Number: {students[index].admission_number}</p>
            <p>Roll Number: {students[index].roll_no}</p>
            <p>Name: {students[index].student_full_name}</p>
-           <p>Status: {students[index].present}</p>
+           {/* <p>Status: {students[index].present}</p> */}
            <button style={{height:'60px',width:'150px',backgroundColor:'green'}} onClick={()=>{handlePresent(students[index].admission_number)}}>Present</button>
            <button style={{height:'60px',width:'150px',backgroundColor:'red'}} onClick={()=>{handleAbsent(students[index].admission_number)}}>Absent</button>
            <button style={{height:'60px',width:'150px',backgroundColor:'blue'}} onClick={()=>{handleLeave(students[index].admission_number)}}>Leave</button>
            <button style={{height:'60px',width:'150px',backgroundColor:'gold'}} onClick={()=>{handleLate(students[index].admission_number)}}>Late</button>
+           </div>
+           <div className="aabbccddee">
+      <ul>
+        <li style={{backgroundColor:'red'}}>
+          <span>Roll No</span>
+          <span>Student Name</span>
+          <span>Today Status</span>
+        </li>
+        {(() => {
+          const studentList = [];
+          for (let i = 0; i < students1.length; i++) {
+            const student = students1[i];
+
+            studentList.push(
+              <li key={student.admission_number}>
+                {/* <span>{'Admission Number   ::   '}{student.admission_number}{'     '}</span> */}
+                <span>{student.roll_no}</span>
+                <span>{student.student_full_name}</span>
+                <span>{student.status1}</span>
+              </li>
+            );
+          }
+          return studentList;
+        })()}
+      </ul>
+      </div>
+    
     </SideBAR>
   );
 };
