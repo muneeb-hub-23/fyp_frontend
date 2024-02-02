@@ -31,6 +31,7 @@ const Addstudent = () => {
       ...formData,
       [name]: value,
     });
+ 
   };
   const ApiCaller = async (props) => {
 
