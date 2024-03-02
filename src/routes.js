@@ -21,7 +21,6 @@ import Person from "@material-ui/icons/Person";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
-import TableList from "views/TableList/TableList.js";
 // core components/views for RTL layout
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import ApartmentIcon from '@material-ui/icons/Apartment'

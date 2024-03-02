@@ -121,7 +121,7 @@ for(var i = 0; i<xab; i++){
 }
 const employee = {employee_number,employee_full_name,employee_mobile_number,father_full_name,father_mobile_number,joining_date,email,cnic,password}
 await postData(apiaddress+'/modify-user',{employee,upstate})
-window.location.href = '/admin/modifyuser';
+window.location.href = '/';
 
 }
 

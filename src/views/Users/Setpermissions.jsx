@@ -91,7 +91,7 @@ dashboardRoutes.map((route) => {
 
 let userdata = {employee_number,employee_full_name,employee_mobile_number,father_full_name,father_mobile_number,joining_date,email,cnic,password}
 await postData(apiaddress+'/add-user',{userdata,permissionsarray})
-window.location.href = '/admin/adduser';
+window.location.href = '/';
 
 }
 
