@@ -32,13 +32,42 @@ async function postData(url, data) {
 }
 
 function Viewattendance() {
-
+const [classes,setClasses]=useState([])
+const [sections,setSections] = useState([])
+const [selectedValue, setSelectedValue] = useState({classn: '',section: '',session:''});
 const [select,setselect] = useState({class1:"",section1:""})
-const [students,setstudents] = useState({})
-
-
+const [students,setstudents] = useState([{roll_no:0,student_full_name:'null'}])
+const [totaldays,settotaldays] = useState(0)
+const [sessionsdate,setsessionsdate] = useState('0')
+const user = localStorage.getItem('username')
+const [sessions,setsessions] = useState([{session:0}])
+const [runningstu,setrunningstu] = useState({})
+const ApiCaller = async() => {
+      const res1 = await postData(apiaddress+'/get-special-classes',{number:user})
+      setClasses(res1)
+      const res2 = await postData(apiaddress+'/get-special-sections',{number:user})
+      setSections(res2)
+      let a = res1[0]
+      let b = res2[0]
+      let c = a.class
+      let d = b.section
+      setSelectedValue({classn:c,section:d})
+      const res3 = await postData(apiaddress+'/get-students-list',{class1:c,section1:d})
+      setstudents(res3)
+      setrunningstu(res3[0])
+      const res4 = await postData(apiaddress+'/get-sessions',{hello:'true'})
+      setsessions(res4)
+      setSelectedValue({...selectedValue,session:res4[0].session})
+      setsessionsdate(res4[0].startdate)
+      const res5 = await postData(apiaddress+'/get-total-days',{sdate:res4[0].startdate,ldate:res4[0].enddate,stuadn:res3[0].admission_number})
+      console.log(res5)
+}
 
   useEffect(() => {
+    const runit = async()=>{
+      await ApiCaller()
+    }
+    runit()
     const originalDoughnutDraw = Chart.controllers.doughnut.prototype.draw;
     Chart.helpers.extend(Chart.controllers.doughnut.prototype, {
       draw: function() {
@@ -94,7 +123,6 @@ const [students,setstudents] = useState({})
     const chart2 = createChart('myChart2',60, 'red');
     const chart3 = createChart('myChart3', 80,'#00acc1');
     const chart4 = createChart('myChart4', 60,'rgb(255, 89, 0)');
-
     return () => {
       // Cleanup charts
       chart1.destroy();
@@ -104,46 +132,68 @@ const [students,setstudents] = useState({})
     };
   }, []);
 
+  const handlesessionchange = async () => {
+    setSelectedValue({...selectedValue,session:document.getElementById('session').value})
+    for(var i=0; i<sessions.length; i++){
+      if(sessions[i].session === document.getElementById('session').value){
+        setsessionsdate(sessions[i].startdate)
+      }
+    }
+  }
+
   return (
 <>
 <div className='a11'>
-<GridContainer justify="center" alignItems="center" spacing={1}>
+
+<GridContainer justify="center" alignItems="center">
 
 <GridItem xs={12} sm={6} md={2}> 
 <p className='viewdepname'>ICT DEPARTMENT</p>
 </GridItem>
-<GridItem xs={12} sm={6} md={2}>
-  <select className='viewdepname' name="class" id="class1">
+<GridItem xs={12} sm={6} md={1}>
+  <select value={selectedValue.session} onChange={handlesessionchange} className='viewdepname' name="class" id="session">
 
-  <option value="a">21-ICT-17</option>
-  <option value="b">2nd-Year</option>
-  <option value="b">3rd-Year</option>
+  {sessions.map((session)=>(
+      <option value={session.session}>{session.session}</option>
+      ))}
 
   </select>
 </GridItem>
-<GridItem xs={12} sm={6} md={4}>
+<GridItem xs={12} sm={6} md={2}>
+  <select className='viewdepname' name="class" id="class1">
+
+      {students.map((student)=>(
+      <option value={student.admission_number}>{student.roll_no}</option>
+      ))}
+
+  </select>
+</GridItem>
+
+<GridItem xs={12} sm={6} md={3}>
   <select className='viewdepname h2' name="class" id="class1">
 
-  <option value="a">Muneeb Baig</option>
-  <option value="b">2nd-Year</option>
-  <option value="b">3rd-Year</option>
+  {students.map((student)=>(
+      <option value={student.admission_number}>{student.student_full_name}</option>
+      ))}
 
   </select>
 </GridItem>
 <GridItem xs={12} sm={6} md={2}>  
 <select className='viewdepname' name="class" id="class1">
 
-<option value="a">1st-Year</option>
-<option value="b">2nd-Year</option>
-<option value="b">3rd-Year</option>
+        
+{classes.map((classes)=>(
+                        <option value={classes.class}>{classes.class}</option>
+                      ))}
 
 </select>
 </GridItem>
 <GridItem xs={12} sm={6} md={2}> 
 <select className='viewdepname' name="class" id="section1">
 
-<option value="a">a</option>
-<option value="b">b</option>
+{sections.map((sections)=>(
+                        <option value={sections.section}>{sections.section}</option>
+                      ))}
 
 </select>
 </GridItem>
@@ -162,7 +212,7 @@ const [students,setstudents] = useState({})
 <p className='bd2'>Date</p>
 </div>
 <div className="rtext">
-<p className='bd3'>23-09-2024</p>
+<p className='bd3'>{runningstu.joining_date}</p>
 </div>
 </div>
 </GridItem>
@@ -174,7 +224,7 @@ const [students,setstudents] = useState({})
 <p className='bd2 bd4'>Days</p>
 </div>
 <div className="rtext">
-  <p className='bd3 bd5'>122</p>
+  <p className='bd3 bd5'>{totaldays}</p>
 </div>
 </div>
 </GridItem>
@@ -188,7 +238,7 @@ const [students,setstudents] = useState({})
 
 </div>
 <div className="rtext">
-<p className='bd3 bd6'>23-09-2024</p>
+<p className='bd3 bd6'>{sessionsdate}</p>
 </div>
 </div>
 </GridItem>
