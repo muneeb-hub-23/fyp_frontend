@@ -137,6 +137,7 @@ export default function Admin({ ...rest }) {
       window.removeEventListener("resize", resizeFunction);
     };
   }, [mainPanel]);
+
   return (
     <div id="maintopdiv" className={classes.wrapper}>
       <Sidebar

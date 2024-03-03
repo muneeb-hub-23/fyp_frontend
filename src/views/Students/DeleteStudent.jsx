@@ -75,7 +75,7 @@ const DeleteStudent = () => {
 const ApiCaller = async () => {
 
     try {
-      const response = await postData(apiaddress+'/get-students-list',selectedValue);
+      const response = await postData(apiaddress+'/get-students-list',{class1:selectedValue.classn,section1:selectedValue.section});
       setData(response);
     } catch (error) {
       console.error('Error making POST request:', error);

@@ -35,13 +35,22 @@ function Viewattendance() {
 const [classes,setClasses]=useState([])
 const [sections,setSections] = useState([])
 const [selectedValue, setSelectedValue] = useState({classn: '',section: '',session:''});
-const [select,setselect] = useState({class1:"",section1:""})
+const [select,setselect] = useState({roll_no:0,name:'null'})
 const [students,setstudents] = useState([{roll_no:0,student_full_name:'null'}])
-const [totaldays,settotaldays] = useState(0)
 const [sessionsdate,setsessionsdate] = useState('0')
 const user = localStorage.getItem('username')
 const [sessions,setsessions] = useState([{session:0}])
-const [runningstu,setrunningstu] = useState({})
+const [runningstu,setrunningstu] = useState({admission_number:0})
+const [metadata,setmetadata] = useState({
+  totaldays: 51,
+  totalp: 34,
+  totala: 12,
+  totall: 3,
+  totallt: 2,
+  firstwarning: "Expecting",
+  secondwarning: "Expecting",
+  thirdwarning: "Expecting"
+})
 const ApiCaller = async() => {
       const res1 = await postData(apiaddress+'/get-special-classes',{number:user})
       setClasses(res1)
@@ -54,20 +63,99 @@ const ApiCaller = async() => {
       setSelectedValue({classn:c,section:d})
       const res3 = await postData(apiaddress+'/get-students-list',{class1:c,section1:d})
       setstudents(res3)
+      setselect({roll_no:res3[0].admission_number,name:res3[0].student_full_name})
       setrunningstu(res3[0])
       const res4 = await postData(apiaddress+'/get-sessions',{hello:'true'})
       setsessions(res4)
       setSelectedValue({...selectedValue,session:res4[0].session})
       setsessionsdate(res4[0].startdate)
       const res5 = await postData(apiaddress+'/get-total-days',{sdate:res4[0].startdate,ldate:res4[0].enddate,stuadn:res3[0].admission_number})
-      console.log(res5)
+      setmetadata(res5)
+
+}
+const ApiCaller1 = async(val)=>{
+  var res4
+  for(var i=0; i<sessions.length; i++){
+    if(sessions[i].session === document.getElementById('session').value){
+      res4=sessions[i]
+    }
+
 }
 
+const res5 = await postData(apiaddress+'/get-total-days',{sdate:res4.startdate,ldate:res4.enddate,stuadn:val})
+setmetadata(res5)
+  const originalDoughnutDraw = Chart.controllers.doughnut.prototype.draw;
+Chart.helpers.extend(Chart.controllers.doughnut.prototype, {
+  draw: function() {
+    const chart = this.chart;
+    const {
+      width,
+      height,
+      ctx,
+      config
+    } = chart.chart;
+
+    const {
+      datasets
+    } = config.data;
+
+    const dataset = datasets[0];
+    const datasetData = dataset.data;
+    const completed = datasetData[0];
+    const text = `${completed}%`;
+    let x, y, mid;
+
+    originalDoughnutDraw.apply(this, arguments);
+
+    const fontSize = (height / 80).toFixed(1);
+    ctx.font = fontSize + "em Lato, sans-serif";
+    ctx.textBaseline = "top";
+
+    x = Math.round((width - ctx.measureText(text).width) / 2);
+    y = (height / 2) - fontSize;
+    ctx.fillStyle = "#000000"
+    ctx.fillText(text, x, y);
+    mid = x + ctx.measureText(text).width / 2;
+  }
+});
+const createChart = (id, percent_value,color) => {
+  var context = document.getElementById(id).getContext('2d');
+  var chart = new Chart(context, {
+    type: 'doughnut',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'First dataset',
+        data: [percent_value, 100 - percent_value],
+        backgroundColor: [color]
+      }]
+    },
+    options: {}
+  });
+
+  return chart;
+};
+const chart1 = createChart('myChart1', Math.round((res5.totalp*100)/res5.totaldays),'#00a40e');
+const chart2 = createChart('myChart2',Math.round((res5.totala*100)/res5.totaldays), 'red');
+const chart3 = createChart('myChart3', Math.round((res5.totall*100)/res5.totaldays),'#00acc1');
+const chart4 = createChart('myChart4', Math.round((res5.totallt*100)/res5.totaldays),'rgb(255, 89, 0)');
+return () => {
+  // Cleanup charts
+  chart1.destroy();
+  chart2.destroy();
+  chart3.destroy();
+  chart4.destroy();
+};
+
+
+
+}
   useEffect(() => {
     const runit = async()=>{
       await ApiCaller()
     }
     runit()
+
     const originalDoughnutDraw = Chart.controllers.doughnut.prototype.draw;
     Chart.helpers.extend(Chart.controllers.doughnut.prototype, {
       draw: function() {
@@ -119,10 +207,10 @@ const ApiCaller = async() => {
 
       return chart;
     };
-    const chart1 = createChart('myChart1', 70,'#00a40e');
-    const chart2 = createChart('myChart2',60, 'red');
-    const chart3 = createChart('myChart3', 80,'#00acc1');
-    const chart4 = createChart('myChart4', 60,'rgb(255, 89, 0)');
+    const chart1 = createChart('myChart1', Math.round((metadata.totalp*100)/metadata.totaldays),'#00a40e');
+    const chart2 = createChart('myChart2',Math.round((metadata.totala*100)/metadata.totaldays), 'red');
+    const chart3 = createChart('myChart3', Math.round((metadata.totall*100)/metadata.totaldays),'#00acc1');
+    const chart4 = createChart('myChart4', Math.round((metadata.totallt*100)/metadata.totaldays),'rgb(255, 89, 0)');
     return () => {
       // Cleanup charts
       chart1.destroy();
@@ -133,14 +221,91 @@ const ApiCaller = async() => {
   }, []);
 
   const handlesessionchange = async () => {
+     setmetadata({
+  totaldays: 0,
+  totalp: 0,
+  totala: 0,
+  totall: 0,
+  totallt: 0,
+  firstwarning: "Expecting",
+  secondwarning: "Expecting",
+  thirdwarning: "Expecting"
+})
     setSelectedValue({...selectedValue,session:document.getElementById('session').value})
     for(var i=0; i<sessions.length; i++){
       if(sessions[i].session === document.getElementById('session').value){
         setsessionsdate(sessions[i].startdate)
       }
     }
-  }
+    await ApiCaller1(runningstu.admission_number)
 
+  }
+  const handlestuchange = async (e) => {
+    var namee = ''
+    for(var i=0; i<students.length; i++){
+      if((students[i].admission_number).toString() === (e.target.value).toString()){
+        namee = students[i].admission_number
+      }
+    }
+    
+    setselect({
+      roll_no:e.target.value,
+      name:namee
+    })
+
+    const val = e.target.value
+    for (var i=0; i<students.length; i++){
+      if((students[i].admission_number).toString() === val.toString() | (students[i].student_full_name).toString() === val.toString()){
+        setrunningstu(students[i])
+   
+      }
+
+    }
+
+    await ApiCaller1(val)
+  }
+  const handlestuchange1 = async (e) => {
+    
+    var rolee = ''
+    for(var i=0; i<students.length; i++){
+      if((students[i].student_full_name).toString() === (e.target.value).toString()){
+        rolee = students[i].student_full_name
+      }
+    }
+    
+    setselect({
+      roll_no:rolee,
+      name:e.target.value
+    })
+
+    const val = e.target.value
+    for (var i=0; i<students.length; i++){
+      if((students[i].admission_number).toString() === val.toString() | (students[i].student_full_name).toString() === val.toString()){
+        setrunningstu(students[i])
+        console.log(runningstu)
+      }
+
+    }
+
+    await ApiCaller1(val)
+  }
+  const handleclasschange = async (e) => {
+
+    const section1 = document.getElementById('section1').value
+    const data = await postData(apiaddress+"/get-students-list",{class1:e.target.value,section1})
+    setstudents(data)
+    setrunningstu(data[0])
+    ApiCaller1(data[0].admission_number)
+
+  }
+  const handlesectionchange = async (e) => {
+    const class1 = document.getElementById('class1').value
+    const data = await postData(apiaddress+"/get-students-list",{class1,section1:e.target.value})
+    setstudents(data)
+    setrunningstu(data[0])
+    ApiCaller1(data[0].admission_number)
+
+  }
   return (
 <>
 <div className='a11'>
@@ -160,7 +325,7 @@ const ApiCaller = async() => {
   </select>
 </GridItem>
 <GridItem xs={12} sm={6} md={2}>
-  <select className='viewdepname' name="class" id="class1">
+  <select className='viewdepname' name="class" id="roll_no" value={select.roll_no} onChange={handlestuchange}>
 
       {students.map((student)=>(
       <option value={student.admission_number}>{student.roll_no}</option>
@@ -170,7 +335,7 @@ const ApiCaller = async() => {
 </GridItem>
 
 <GridItem xs={12} sm={6} md={3}>
-  <select className='viewdepname h2' name="class" id="class1">
+  <select className='viewdepname h2' name="class" id="name" value={select.name} onChange={handlestuchange1}>
 
   {students.map((student)=>(
       <option value={student.admission_number}>{student.student_full_name}</option>
@@ -179,7 +344,7 @@ const ApiCaller = async() => {
   </select>
 </GridItem>
 <GridItem xs={12} sm={6} md={2}>  
-<select className='viewdepname' name="class" id="class1">
+<select className='viewdepname' name="class" id="class1" onChange={handleclasschange}>
 
         
 {classes.map((classes)=>(
@@ -189,7 +354,7 @@ const ApiCaller = async() => {
 </select>
 </GridItem>
 <GridItem xs={12} sm={6} md={2}> 
-<select className='viewdepname' name="class" id="section1">
+<select className='viewdepname' name="class" id="section1" onChange={handlesectionchange}>
 
 {sections.map((sections)=>(
                         <option value={sections.section}>{sections.section}</option>
@@ -224,7 +389,7 @@ const ApiCaller = async() => {
 <p className='bd2 bd4'>Days</p>
 </div>
 <div className="rtext">
-  <p className='bd3 bd5'>{totaldays}</p>
+  <p className='bd3 bd5'>{metadata.totaldays}</p>
 </div>
 </div>
 </GridItem>
@@ -253,7 +418,7 @@ const ApiCaller = async() => {
 
 <GridItem xs={12} sm={6} md={3}>
   <div className="cardst">
-  <h3 className='hh3 hh4'>Total Present (09)</h3>
+  <h3 className='hh3 hh4'>Total Present ({metadata.totalp})</h3>
   <canvas className='doughnutchart' id="myChart1" />
   </div>
 
@@ -261,21 +426,21 @@ const ApiCaller = async() => {
 
 <GridItem xs={12} sm={6} md={3}>
 <div className="cardst">
-  <h3 className='hh3 hh5'>Total Absent (4)</h3>
+  <h3 className='hh3 hh5'>Total Absent ({metadata.totala})</h3>
   <canvas className='doughnutchart' id="myChart2" />
   </div>
 </GridItem>
 
 <GridItem xs={12} sm={6} md={3}>
 <div className="cardst">
-  <h3 className='hh3 hh6'>Total Leaves (12)</h3>
+  <h3 className='hh3 hh6'>Total Leaves ({metadata.totall})</h3>
   <canvas className='doughnutchart' id="myChart3" />
   </div>
 </GridItem>
 
 <GridItem xs={12} sm={6} md={3}>
 <div className="cardst">
-  <h3 className='hh3 hh7'>Total Lates (02)</h3>
+  <h3 className='hh3 hh7'>Total Lates ({metadata.totallt})</h3>
   <canvas className='doughnutchart' id="myChart4" />
   </div>
 </GridItem>
@@ -294,7 +459,7 @@ const ApiCaller = async() => {
       <h5>First Warning</h5>
       </CardHeader>
       <CardBody>
-      <p className='bd3'>23-09-2024</p>
+      <p className='bd3'>{metadata.firstwarning}</p>
       </CardBody>
     </Card>
 </GridItem>
@@ -305,7 +470,7 @@ const ApiCaller = async() => {
       <h5>Second Warning</h5>
       </CardHeader>
       <CardBody>
-      <p className='bd3'>23-09-2024</p>
+      <p className='bd3'>{metadata.secondwarning}</p>
       </CardBody>
     </Card>
 </GridItem>
@@ -316,7 +481,7 @@ const ApiCaller = async() => {
       <h5>Third Warning</h5>
       </CardHeader>
       <CardBody>
-      <p className='bd3'>23-09-2024</p>
+      <p className='bd3'>{metadata.thirdwarning}</p>
       </CardBody>
     </Card>
 </GridItem>

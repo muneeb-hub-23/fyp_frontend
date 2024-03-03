@@ -342,6 +342,16 @@ var myChart6 = new Chart(ctx6, {
 });
 
 }, 200);
+// function toggleFullScreen() {
+//   if (!document.fullscreenElement) {
+//     document.documentElement.requestFullscreen();
+//   } else {
+//     if (document.exitFullscreen) {
+//       document.exitFullscreen();
+//     }
+//   }
+// }
+
 
   return (
     <div>
