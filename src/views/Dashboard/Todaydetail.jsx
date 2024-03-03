@@ -7,18 +7,42 @@ import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
+import Chart from 'chart.js';
+async function postData(url, data) {
+  try {
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const responseData = await response.json();
+    // console.log('Response:', responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error:", error.message);
+  }
+}
+
 function Todaydetail() {
     const {classn,section} = useParams()
     const [students, setStudents] = React.useState([{ admission_number: 1, roll_no: 1, student_full_name: 'hello', status1: 'p' }]);
     const [barData, setBarData] = React.useState([0, 0, 0, 0, 0]);
-  
+
     const ApiCaller = async () => {
       try {
-        const response = await axios.post(apiaddress+'/dashboard-chart-expanded', [classn, section]);
-        setBarData(response.data);
+        const response = await postData(apiaddress+'/dashboard-chart-expanded', {classn, section});
+        setBarData(response);
 
-        const response2 = await axios.post(apiaddress+'/student-is-listing', [classn, section]);
-        setStudents(response2.data);
+        const response2 = await postData(apiaddress+'/student-is-listing', {class1:classn, section1:section});
+        setStudents(response2);
 
       } catch (err) {
         console.log(err);
@@ -30,7 +54,6 @@ function Todaydetail() {
       const Priority = async () =>{
         try{
           await ApiCaller();
-          console.log(students)
         }catch (err){
           console.log(err)
         }
@@ -38,6 +61,49 @@ function Todaydetail() {
       Priority()
       
     }, []);
+
+    setTimeout(() => {
+      const ctx = document.getElementById('myChart').getContext('2d');
+      
+      var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["Strength","Present","Absent","Leave","Late"],
+            datasets: [{
+                label: '1st-Year-A',
+                data: barData,
+                backgroundColor: [
+                    '#ec407a',
+                    '#00a40e',
+                    'red',
+                    '#00acc1',
+                    'orange'
+                ],
+                borderColor: [
+                  '#ec407a',
+                  '#00a40e',
+                  'red',
+                  '#00acc1',
+                  'orange'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+      });
+
+      
+      }, 200);
+
+
   return (
     <GridContainer>
    
@@ -51,7 +117,12 @@ function Todaydetail() {
        <CardBody>
          
 <GridContainer justify="center" alignItems="center" spacing={2}>
+<GridItem xs={12} sm={8} md={6}>
 
+<canvas id="myChart"/>
+
+</GridItem>
+<GridItem xs={12} sm={12} md={12}>
 <ul className='myul'>
         <li className='fullwidth colorwhite' style={{backgroundColor:'red'}}>
         <span className='width30'>Roll No</span>
@@ -67,7 +138,7 @@ function Todaydetail() {
         </li>
               ))}
 </ul>
-
+</GridItem>
 </GridContainer>
 
 
