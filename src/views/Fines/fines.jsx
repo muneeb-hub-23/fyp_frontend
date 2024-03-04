@@ -255,8 +255,9 @@ const Fines = () => {
   };
 
 
-  useEffect(() => {
+
     const speci = async () => {
+
       try {
         let abc = await postData(apiaddress + "/allfines", {
           students: students,
@@ -268,8 +269,7 @@ const Fines = () => {
         console.log(err);
       }
     };
-    speci();
-  }, [selectedValue.ldate, count]);
+
   useEffect(() => {
     async function getStudents() {
       try {
@@ -411,9 +411,11 @@ const Fines = () => {
         <h4 className={classes.cardTitleWhite}>Fines List</h4>
       </CardHeader>
       <CardBody>
+      <div className="a11">
         <GridContainer justify="center" alignItems="center" spacing={1}>
+
           <GridItem xs={12} sm={6} md={2}>
-          <select className='myselectdropdown' id="classn" value={selectedValue.classn} onChange={handleDropdownChange}>
+          <select className='viewdepname' id="classn" value={selectedValue.classn} onChange={handleDropdownChange}>
         
         {classes.map((classes)=>(
                        <option value={classes.class}>{classes.class}</option>
@@ -423,7 +425,7 @@ const Fines = () => {
           </GridItem>
 
           <GridItem xs={12} sm={6} md={2}>
-          <select className='myselectdropdown' id="section" value={selectedValue.section} onChange={handleDropdownChange}>
+          <select className='viewdepname' id="section" value={selectedValue.section} onChange={handleDropdownChange}>
           {sections.map((sections)=>(
                         <option value={sections.section}>{sections.section}</option>
                       ))}
@@ -432,7 +434,7 @@ const Fines = () => {
 
           <GridItem xs={12} sm={6} md={2}>
             <input
-              className="myselectdropdown"
+              className="viewdepname"
               type="date"
               id="sdate"
               value={reverseDateFormat(selectedValue.sdate)}
@@ -442,7 +444,7 @@ const Fines = () => {
 
           <GridItem xs={12} sm={6} md={2}>
             <input
-              className="myselectdropdown"
+              className="viewdepname"
               type="date"
               id="ldate"
               value={reverseDateFormat(selectedValue.ldate)}
@@ -452,16 +454,17 @@ const Fines = () => {
 
           <GridItem xs={12} sm={12} md={2}>
             <button
-              onClick={() => {
-                setCount(count + 1);
-              }}
-              style={{ backgroundColor: "green", color: "white" }}
-              className="myselectdropdown"
+              onClick={speci}
+              style={{ backgroundColor: "orange", color: "white",cursor:'pointer' }}
+              className="viewdepname"
             >
               SHOW
             </button>
           </GridItem>
 
+</GridContainer>
+</div>
+<GridContainer justify="center" alignItems="center" spacing={1}>
           <GridItem xs={12} sm={12} md={12}>
             <ul className="myul">
               <li>

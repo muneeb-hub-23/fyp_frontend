@@ -80,9 +80,6 @@ export default function Dashboard() {
     ApiCaller();
   }, []);
 
-
-
-
 const emailsSubscriptionChart = {
 
   

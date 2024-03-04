@@ -122,39 +122,42 @@ const totalf = countTotal()
           <h4>Fines List</h4>
         </CardHeader>
         <CardBody>
+        <div className='a11'>
 <GridContainer justify="center" alignItems="center" spacing={1}>
 
 <GridItem xs={12} sm={4} md={2}>
-<p className="myselectdropdown2">{adn}</p>
+<p className="viewdepname">{adn}</p>
 
 </GridItem>
 
 <GridItem xs={12} sm={4} md={2}>
-<input className="myselectdropdown2" type="text" value={student[0].roll_no} onChange={handleDropdownChange}/>
+<input disabled className="viewdepname" type="text" value={student[0].roll_no} onChange={handleDropdownChange}/>
 
 </GridItem>
 
 <GridItem xs={12} sm={4} md={2}>
-<p className="myselectdropdown2">{student[0].student_full_name}</p>
+<p className="viewdepname">{student[0].student_full_name}</p>
 
 </GridItem>
 
 <GridItem xs={12} sm={4} md={2}>
-<p className="myselectdropdown2">{student[0].class + ' ' + student[0].section}</p>
+<p className="viewdepname">{student[0].class + ' ' + student[0].section}</p>
 
 </GridItem>
 
 <GridItem xs={12} sm={4} md={2}>
-<input className="myselectdropdown2" type="date" id="sdate" value={reverseDateFormat(selectedValue.sdate)} onChange={handleDropdownChange} />
+<input disabled className="viewdepname" type="date" id="sdate" value={reverseDateFormat(selectedValue.sdate)} onChange={handleDropdownChange} />
 
 </GridItem>
 
 <GridItem xs={12} sm={4} md={2}>
-<input className="myselectdropdown2" type="date" id="ldate" value={reverseDateFormat(selectedValue.ldate)} onChange={handleDropdownChange}/>
+<input disabled className="viewdepname" type="date" id="ldate" value={reverseDateFormat(selectedValue.ldate)} onChange={handleDropdownChange}/>
 
 </GridItem>
 
 </GridContainer>
+</div>
+
 <GridContainer justify="center" alignItems="center" spacing={1}>
 
 <GridItem xs={12} sm={12} md={12}>
