@@ -53,6 +53,9 @@ import Editpermissions from "views/Users/Editpermissions";
 import Assignclasses from "views/Users/Assignclasses";
 import Blockeddates from "views/Users/Blockeddates";
 import Createsessions from "views/Users/Createsessions";
+import StudentWiseReport from "views/Reports/StudentWiseReport";
+import ClassWiseReports from "views/Reports/ClassWiseReports";
+import DepartmentWiseReport from "views/Reports/DepartmentWiseReport";
 
 const dashboardRoutes = [
   {
@@ -226,6 +229,33 @@ const dashboardRoutes = [
     icon: LibraryBooks,
     component: Reports,
     visible:true,
+    layout: "/admin"
+  },
+  {
+    path: "/studentreport",
+    name: "Student Report",
+    rtlName: "studentreport",
+    icon: LibraryBooks,
+    component: StudentWiseReport,
+    visible:false,
+    layout: "/admin"
+  },
+  {
+    path: "/classreport",
+    name: "Class Report",
+    rtlName: "classreport",
+    icon: LibraryBooks,
+    component: ClassWiseReports,
+    visible:false,
+    layout: "/admin"
+  },
+  {
+    path: "/departmentreport",
+    name: "Department Report",
+    rtlName: "departmentreport",
+    icon: LibraryBooks,
+    component: DepartmentWiseReport,
+    visible:false,
     layout: "/admin"
   },
   {
