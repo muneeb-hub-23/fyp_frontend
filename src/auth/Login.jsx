@@ -28,6 +28,7 @@ function getRandomItem(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 const bgimg = getRandomItem(images);
+const bgimg1 = getRandomItem(images);
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -90,13 +91,7 @@ const [ errorMessage, setErrorMessage ] = useState(null)
               padding: '0 20px',
             }}
           >
-            {/* <Avatar style={{ margin: 1, backgroundColor: defaultTheme.palette.secondary.main }}>
-              <img src={logo} style={{width:'100%',height:'100%'}} />
-            </Avatar> */}
             <img src={logo} style={{width:'40%',height:'20%',marginTop:'25%'}} />
-            {/* <Typography component="h1" variant="h5">
-              Sign in
-            </Typography> */}
             <form onSubmit={handleSubmit} style={{ width: '100%', marginTop: 50 }}>
               <TextField
                value={formData.userName}
@@ -123,10 +118,6 @@ const [ errorMessage, setErrorMessage ] = useState(null)
                 autoComplete="current-password"
 
               />
-              {/* <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              /> */}
                {errorMessage ?
                <div style={{color:'red'}}>{errorMessage}</div>
                : null }
@@ -139,18 +130,6 @@ const [ errorMessage, setErrorMessage ] = useState(null)
               >
                 Sign In
               </Button>
-              {/* <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid> */}
               <Copyright style={{ marginTop: 20 }} />
             </form>
           </Box>
