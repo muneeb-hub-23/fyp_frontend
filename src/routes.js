@@ -17,8 +17,10 @@
 */
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
+import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import Person from "@material-ui/icons/Person";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
+import WarningIcon from '@material-ui/icons/Warning';
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
 // core components/views for RTL layout
@@ -56,6 +58,8 @@ import Createsessions from "views/Users/Createsessions";
 import StudentWiseReport from "views/Reports/StudentWiseReport";
 import ClassWiseReports from "views/Reports/ClassWiseReports";
 import DepartmentWiseReport from "views/Reports/DepartmentWiseReport";
+import Warningletters from "views/warnings/Warningletters";
+import Userlogs from "views/logs/Userlogs";
 
 const dashboardRoutes = [
   {
@@ -232,6 +236,15 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
+    path: "/warningletters",
+    name: "Warningletters",
+    rtlName: "warningletters",
+    icon: WarningIcon,
+    component: Warningletters,
+    visible:true,
+    layout: "/admin"
+  },
+  {
     path: "/studentreport",
     name: "Student Report",
     rtlName: "studentreport",
@@ -357,7 +370,15 @@ const dashboardRoutes = [
     visible:true,
     layout: "/admin"
   },
-
+  {
+    path: "/logs",
+    name: "Logs",
+    rtlName: "logs",
+    icon: ImportContactsIcon,
+    component: Userlogs,
+    visible:true,
+    layout: "/admin"
+  },
   
 
   

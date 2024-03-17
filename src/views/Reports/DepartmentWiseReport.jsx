@@ -4,7 +4,7 @@ import GridItem from 'components/Grid/GridItem'
 import Chart from 'chart.js';
 import '../Viewattendance/viewattendance.css'
 import { apiaddress } from 'auth/apiaddress';
-import { duration } from '@material-ui/core';
+
 function getTodayDate() {
   const today = new Date();
   const year = today.getFullYear();
@@ -179,7 +179,9 @@ document.getElementById('myChart').value = ''
     borderWidth: 1
     }
     ]
-    var ctx = document.getElementById('myChart').getContext('2d');
+
+    var ctx =await document.getElementById('myChart').getContext('2d');
+    ctx.clearRect(0,0,100,100);
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
