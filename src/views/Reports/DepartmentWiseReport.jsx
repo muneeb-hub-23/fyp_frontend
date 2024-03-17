@@ -107,89 +107,97 @@ const [selectedValue,setSelectedValue] = useState({crietaria:'daily',duration:'t
 const [att,setAtt] = useState({str:0,p:0,a:0,l:0,lt:0})
 
 const CallApi = async () => {
-  const labeld = []
-  const presentd = []
-  const absentd = []
-  const leaved = []
-  const lated = []
-  const datasetd = [
-    
-{
-label: 'Present',
-data: presentd,
-backgroundColor: [
-'rgba(0,255,0,0.2)'
-],
-borderColor: [
-'black'
-],
-borderWidth: 1
-},
-{
-label: 'Absent',
-data: absentd,
-backgroundColor: [
-'rgba(255, 99, 132, 0.2)'
-],
-borderColor: [
-'black'
-],
-borderWidth: 1
-},
-{
-label: 'Leave',
-data: leaved,
-backgroundColor: [
-'rgba(0,0,215, 0.2)'
-],
-borderColor: [
-'black'
-],
-borderWidth: 1
-},
-{
-label: 'Late',
-data: lated,
-backgroundColor: [
-'rgba(255, 150, 0, 0.2)'
-],
-borderColor: [
-'black'
-],
-borderWidth: 1
-}
+  var labeld = []
+  var presentd = []
+  var absentd = []
+  var leaved = []
+  var lated = []
 
-]
   if(selectedValue.duration === 'custom'){
   const datesd = await getDatesInRange(dates.sdate,dates.ldate)
-  const response = await postData(apiaddress+'/department-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd})
-  console.log(response)
+  const re = await postData(apiaddress+'/department-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd})
+  setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
+  labeld = re.labels
+  setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
+  console.log(re)
   }else{
   const datesd = await getDatesByPeriod(selectedValue.duration)
-  const response = await postData(apiaddress+'/department-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd})
-  console.log(response)
+  const re = await postData(apiaddress+'/department-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd})
+  labeld = re.labels
+  console.log(re)
+  setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
+ labeld = re.labels
+ presentd=re.presentd
+ absentd = re.absentd
+ leaved = re.leaved
+ lated = re.lated
 }
-
-  var ctx = document.getElementById('myChart').getContext('2d');
-  var myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-          labels: labeld,
-          datasets: datasetd
-      },
-      options: {
-          responsive:false,
-          maintainAspectRatio:false,
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero: true
-                  }
-              }]
-          }
-      }
-  });
-
+document.getElementById('myChart').value = ''
+  var datasetd = [
+    {
+    label: 'Present',
+    data: presentd,
+    backgroundColor: [
+    'rgba(0,255,0,0.2)'
+    ],
+    borderColor: [
+    'rgba(0,255,0,1)'
+    ],
+    borderWidth: 1
+    },
+    {
+    label: 'Absent',
+    data: absentd,
+    backgroundColor: [
+    'rgba(255, 99, 132, 0.2)'
+    ],
+    borderColor: [
+      'rgba(255, 99, 132, 1)'
+    ],
+    borderWidth: 1
+    },
+    {
+    label: 'Leave',
+    data: leaved,
+    backgroundColor: [
+    'rgba(0,0,215, 0.2)'
+    ],
+    borderColor: [
+      'rgba(0,0,215, 1)'
+    ],
+    borderWidth: 1
+    },
+    {
+    label: 'Late',
+    data: lated,
+    backgroundColor: [
+    'rgba(255, 150, 0, 0.2)'
+    ],
+    borderColor: [
+      'rgba(255, 150, 0, 1)'
+    ],
+    borderWidth: 1
+    }
+    ]
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labeld,
+            datasets: datasetd
+        },
+        options: {
+            responsive:true,
+            maintainAspectRatio:true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    }); 
 
 } 
 
