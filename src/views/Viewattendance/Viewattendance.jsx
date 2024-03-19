@@ -264,28 +264,30 @@ return () => {
     await ApiCaller1(val)
   }
   const handlestuchange1 = async (e) => {
-    
+  
     var rolee = ''
     for(var i=0; i<students.length; i++){
-      if((students[i].student_full_name).toString() === (e.target.value).toString()){
+      if((students[i].roll_no).toString() === e.target.value){
         rolee = students[i].student_full_name
+  
       }
     }
-    
+  
     setselect({
-      roll_no:rolee,
-      name:e.target.value
+      roll_no:e.target.value,
+      student_full_name:rolee
     })
-
+  
     const val = e.target.value
+  
     for (var i=0; i<students.length; i++){
       if((students[i].admission_number).toString() === val.toString() | (students[i].student_full_name).toString() === val.toString()){
         setrunningstu(students[i])
         console.log(runningstu)
       }
-
+  
     }
-
+  
     await ApiCaller1(val)
   }
   const handleclasschange = async (e) => {

@@ -1,0 +1,53 @@
+.piecapsule{
+   
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    
+}
+.piechart{
+    margin: 0 auto;
+    text-align: center;
+    display: inline;
+    min-width: 100%;
+    background-color: white;
+    border-radius: 10px;
+}
+.deltabox{
+    display: block;
+    height: 20vh;
+    width: 100%;
+    margin-bottom: 100px;
+    border-radius: 10px;
+}
+@media screen and (max-width: 600px) {
+    .deltabox{
+        height: 30vh;
+    }
+  }
+.deltabox h4{
+    color: rgb(255, 255, 255);
+    font-weight: 600;
+    margin: 0 auto;
+    text-align: center;
+}
+.deltabox h1{
+    text-align: center;
+    color: white;
+
+}
+.strngth{
+    background-color: #d81b60;
+}
+.prsnt{
+    background-color: #00a40e;
+}
+.absnt{
+    background-color: red;
+}
+.lve{
+    background-color: #00acc1;
+}
+.lte{
+    background-color: rgb(255, 89, 0);
+}

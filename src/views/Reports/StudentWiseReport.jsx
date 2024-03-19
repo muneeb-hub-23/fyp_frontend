@@ -101,28 +101,50 @@ async function postData(url, data) {
   }
 }
 function StudentWiseReport() {
+const [runningstu,setrunningstu] = useState({admission_number:0})
+const [students,setstudents] = useState([{roll_no:0,student_full_name:'null'}])
+const [select,setselect] = useState({roll_no:0,name:'null'})
+const [classes,setClasses]=useState([])
+const [sections,setSections] = useState([])
+const [stdval,setstdval] = useState({classn:'',section:''})
 const getvalue = getTodayDate()
 const [dates,setDates] = useState({sdate:getvalue,ldate:getvalue})
 const [selectedValue,setSelectedValue] = useState({crietaria:'daily',duration:'thisweek'})
 const [att,setAtt] = useState({str:0,p:0,a:0,l:0,lt:0})
+const user = localStorage.getItem('username')
+const [metadata,setmetadata] = useState({
+  totaldays: 51,
+  totalp: 34,
+  totala: 12,
+  totall: 3,
+  totallt: 2,
+  firstwarning: "Expecting",
+  secondwarning: "Expecting",
+  thirdwarning: "Expecting"
+})
 
 const CallApi = async () => {
+
+
   var labeld = []
   var presentd = []
   var absentd = []
   var leaved = []
   var lated = []
 
+  const an = document.getElementById('class1').value
+  const bn = document.getElementById('section1').value
+
   if(selectedValue.duration === 'custom'){
   const datesd = await getDatesInRange(dates.sdate,dates.ldate)
-  const re = await postData(apiaddress+'/department-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd})
+  const re = await postData(apiaddress+'/student-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd,admission_number:runningstu.admission_number})
   setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
   labeld = re.labels
   setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
   console.log(re)
   }else{
   const datesd = await getDatesByPeriod(selectedValue.duration)
-  const re = await postData(apiaddress+'/department-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd})
+  const re = await postData(apiaddress+'/student-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd,admission_number:runningstu.admission_number})
   labeld = re.labels
   console.log(re)
   setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
@@ -201,7 +223,29 @@ document.getElementById('myChart').value = ''
         }
     }); 
 
+
 } 
+
+const Apiforclasssec = async () => {
+  const res1 = await postData(apiaddress+'/get-special-classes',{number:user})
+  setClasses(res1)
+  const res2 = await postData(apiaddress+'/get-special-sections',{number:user})
+  setSections(res2)
+  let a = res1[0]
+  let b = res2[0]
+  let c = a.class
+  let d = b.section
+  const res3 = await postData(apiaddress+'/get-students-list',{class1:c,section1:d})
+  setstudents(res3)
+  setselect({roll_no:res3[0].admission_number,name:res3[0].student_full_name})
+  setrunningstu(res3[0])
+  
+}
+useEffect(()=>{
+
+  Apiforclasssec()
+  
+},[])
 
 const handlecrietaria = async (e) => {
   setSelectedValue({...selectedValue,crietaria:e.target.value})
@@ -224,7 +268,60 @@ const handleduration = async (e) => {
   }
 }
 
+const handleclasschange = async (e) => {
+setstdval({...stdval,classn:e.target.value})
+}
+const handlesectionchange = async (e) => {
+setstdval({...stdval,section:e.target.value})
+}
+const handlestuchange = async (e) => {
+  var namee = ''
+  for(var i=0; i<students.length; i++){
+    if((students[i].admission_number).toString() === (e.target.value).toString()){
+      namee = students[i].admission_number
+    }
+  }
+  setselect({
+    roll_no:e.target.value,
+    name:namee
+  })
 
+  const val = e.target.value
+  for (var i=0; i<students.length; i++){
+    if((students[i].admission_number).toString() === val.toString() | (students[i].student_full_name).toString() === val.toString()){
+      setrunningstu(students[i])
+ 
+    }
+
+  }
+
+}
+const handlestuchange1 = async (e) => {
+  
+  var rolee = ''
+  for(var i=0; i<students.length; i++){
+    if((students[i].roll_no).toString() === (e.target.value).toString()){
+      rolee = students[i].student_full_name
+
+    }
+  }
+
+  setselect({
+    roll_no:e.target.value,
+    student_full_name:rolee
+  })
+
+  const val = e.target.value
+
+  for (var i=0; i<students.length; i++){
+    if((students[i].admission_number).toString() === val.toString() | (students[i].student_full_name).toString() === val.toString()){
+      setrunningstu(students[i])
+
+    }
+
+  }
+
+}
 
   return (
     <>
@@ -233,8 +330,45 @@ const handleduration = async (e) => {
 
 
 
-<GridItem xs={12} sm={4} md={2}> 
-<p className='viewdepname'>ICT DEPARTMENT</p>
+<GridItem xs={12} sm={4} md={3}>  
+<select className='viewdepname' name="class" id="class1" onChange={handleclasschange}>
+
+        
+{classes.map((classes)=>(
+                        <option value={classes.class}>{classes.class}</option>
+                      ))}
+
+</select>
+</GridItem>
+
+<GridItem xs={12} sm={4} md={3}> 
+<select className='viewdepname' name="class" id="section1" onChange={handlesectionchange}>
+
+{sections.map((sections)=>(
+                        <option value={sections.section}>{sections.section}</option>
+                      ))}
+
+</select>
+</GridItem>
+
+<GridItem xs={12} sm={4} md={3}>
+  <select className='viewdepname h2' name="class" id="name" value={select.name} onChange={handlestuchange1}>
+
+  {students.map((student)=>(
+      <option value={student.admission_number}>{student.student_full_name}</option>
+      ))}
+
+  </select>
+</GridItem>
+
+<GridItem xs={12} sm={4} md={2}>
+  <select className='viewdepname' name="class" id="roll_no" value={select.roll_no} onChange={handlestuchange}>
+
+      {students.map((student)=>(
+      <option value={student.admission_number}>{student.roll_no}</option>
+      ))}
+
+  </select>
 </GridItem>
 
 <GridItem xs={12} sm={4} md={2}>
@@ -287,7 +421,7 @@ const handleduration = async (e) => {
 
 <GridItem xs={12} sm={12} md={2}> 
 <div className="deltabox strngth">
-<h4>Total Strength</h4>
+<h4>Total Days</h4>
 <h1>{att.str}</h1>
 
 </div>

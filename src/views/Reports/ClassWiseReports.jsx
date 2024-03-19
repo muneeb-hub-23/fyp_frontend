@@ -101,28 +101,35 @@ async function postData(url, data) {
   }
 }
 function ClassWiseReport() {
+const [classes,setClasses]=useState([])
+const [sections,setSections] = useState([])
+const [stdval,setstdval] = useState({classn:'',section:''})
 const getvalue = getTodayDate()
 const [dates,setDates] = useState({sdate:getvalue,ldate:getvalue})
 const [selectedValue,setSelectedValue] = useState({crietaria:'daily',duration:'thisweek'})
 const [att,setAtt] = useState({str:0,p:0,a:0,l:0,lt:0})
+const user = localStorage.getItem('username')
 
 const CallApi = async () => {
+
   var labeld = []
   var presentd = []
   var absentd = []
   var leaved = []
   var lated = []
+  const an = document.getElementById('class1').value
+  const bn = document.getElementById('section1').value
 
   if(selectedValue.duration === 'custom'){
   const datesd = await getDatesInRange(dates.sdate,dates.ldate)
-  const re = await postData(apiaddress+'/department-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd})
+  const re = await postData(apiaddress+'/class-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd,classn:an,section:bn})
   setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
   labeld = re.labels
   setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
   console.log(re)
   }else{
   const datesd = await getDatesByPeriod(selectedValue.duration)
-  const re = await postData(apiaddress+'/department-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd})
+  const re = await postData(apiaddress+'/class-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd,classn:an,section:bn})
   labeld = re.labels
   console.log(re)
   setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
@@ -202,6 +209,18 @@ document.getElementById('myChart').value = ''
     }); 
 
 } 
+const Apiforclasssec = async () => {
+  const res1 = await postData(apiaddress+'/get-special-classes',{number:user})
+  setClasses(res1)
+  const res2 = await postData(apiaddress+'/get-special-sections',{number:user})
+  setSections(res2)
+  
+}
+useEffect(()=>{
+
+  Apiforclasssec()
+  
+},[])
 
 const handlecrietaria = async (e) => {
   setSelectedValue({...selectedValue,crietaria:e.target.value})
@@ -224,6 +243,12 @@ const handleduration = async (e) => {
   }
 }
 
+const handleclasschange = async (e) => {
+setstdval({...stdval,classn:e.target.value})
+}
+const handlesectionchange = async (e) => {
+setstdval({...stdval,section:e.target.value})
+}
 
 
   return (
@@ -233,11 +258,28 @@ const handleduration = async (e) => {
 
 
 
-<GridItem xs={12} sm={4} md={2}> 
-<p className='viewdepname'>ICT DEPARTMENT</p>
+<GridItem xs={12} sm={4} md={3}>  
+<select className='viewdepname' name="class" id="class1" onChange={handleclasschange}>
+
+        
+{classes.map((classes)=>(
+                        <option value={classes.class}>{classes.class}</option>
+                      ))}
+
+</select>
 </GridItem>
 
-<GridItem xs={12} sm={4} md={2}>
+<GridItem xs={12} sm={4} md={3}> 
+<select className='viewdepname' name="class" id="section1" onChange={handlesectionchange}>
+
+{sections.map((sections)=>(
+                        <option value={sections.section}>{sections.section}</option>
+                      ))}
+
+</select>
+</GridItem>
+
+<GridItem xs={12} sm={4} md={3}>
 <select id='crietaria' className='viewdepname' value={selectedValue.crietaria} onChange={handlecrietaria}>
   <option value="daily">Daily</option>
   <option value="weekly">Weekly</option>
@@ -246,7 +288,7 @@ const handleduration = async (e) => {
 </select>
 </GridItem>
 
-<GridItem xs={12} sm={4} md={2}>
+<GridItem xs={12} sm={4} md={3}>
 <select id='duration' className='viewdepname' value={selectedValue.duration} onChange={handleduration}> 
 <option value="thisweek">This Week</option>
 <option value="lastweek">Last Week</option>
@@ -260,16 +302,16 @@ const handleduration = async (e) => {
 </select>
 </GridItem>
 
-<GridItem xs={12} sm={4} md={2}>
+<GridItem xs={12} sm={4} md={4}>
 <input type='date' id='sdate' max={getvalue} value={dates.sdate} onChange={handlesdate} className='viewdepname' disabled/>
 </GridItem>
 
-<GridItem xs={12} sm={4} md={2}>  
+<GridItem xs={12} sm={4} md={4}>  
 <input type='date' id='ldate' max={getvalue} value={dates.ldate} onChange={handleldate} className='viewdepname' disabled/>
 </GridItem>
 
-<GridItem xs={12} sm={4} md={2}> 
-<p className='viewdepname' onClick={CallApi} style={{cursor:'pointer',border:'1px solid green',backgroundColor:'rgba(0,255,0,0.2)'}}>Show</p>
+<GridItem xs={12} sm={4} md={4}> 
+<p className='viewdepname' onClick={CallApi} style={{height:'20px',width:'50%',marginBottom:'5px',cursor:'pointer',border:'1px solid green',backgroundColor:'rgba(0,255,0,0.2)'}}>Show</p>
 </GridItem>
   
 
