@@ -5,6 +5,19 @@
     text-align: center;
     
 }
+.inlinep{
+    display: inline;
+    
+}
+.datatext{
+    display: inline;
+    padding-left: 10px;
+
+}
+
+.bgcolorblue{
+    color: #00acc1;
+}
 .piechart{
     margin: 0 auto;
     text-align: center;

@@ -237,7 +237,7 @@ const dashboardRoutes = [
   },
   {
     path: "/warningletters",
-    name: "Warningletters",
+    name: "Warning Letters",
     rtlName: "warningletters",
     icon: WarningIcon,
     component: Warningletters,

@@ -31,6 +31,7 @@ async function postData(url, data) {
 }
 
 function Viewattendance() {
+
 const [classes,setClasses]=useState([])
 const [sections,setSections] = useState([])
 const [selectedValue, setSelectedValue] = useState({classn: '',section: '',session:''});
@@ -83,6 +84,8 @@ const ApiCaller1 = async(val)=>{
 
 const res5 = await postData(apiaddress+'/get-total-days',{sdate:res4.startdate,ldate:res4.enddate,stuadn:val})
 setmetadata(res5)
+
+
   const originalDoughnutDraw = Chart.controllers.doughnut.prototype.draw;
 Chart.helpers.extend(Chart.controllers.doughnut.prototype, {
   draw: function() {
