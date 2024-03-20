@@ -15,27 +15,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { apiaddress } from 'auth/apiaddress';
-async function postData(url, data) {
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const responseData = await response.json();
-    // console.log('Response:', responseData);
-    return responseData;
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
-}
+import { postData } from 'auth/datapost';
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {

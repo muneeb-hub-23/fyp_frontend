@@ -9,26 +9,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import { apiaddress } from 'auth/apiaddress';
-async function postData(url, data) {
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
-}
+import { postData } from 'auth/datapost';
 let s1 = {fontSize:'1.5rem',margin:'5px',backgroundColor:'rgb(140, 233, 0)',padding:'3px',width:'80px',':hover':{backgroundColor:'white'}}
 let s2 = {fontSize:'1.5rem',margin:'5px',backgroundColor:'red',padding:'3px',width:'80px'}
 let s3 = {fontSize:'1.5rem',margin:'5px',backgroundColor:'rgb(4, 166, 253)',padding:'3px',width:'80px'}

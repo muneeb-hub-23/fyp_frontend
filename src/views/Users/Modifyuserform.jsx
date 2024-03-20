@@ -15,7 +15,7 @@ import CardFooter from "components/Card/CardFooter.js";
 import CancelIcon from '@material-ui/icons/Cancel';
 import { apiaddress } from 'auth/apiaddress';
 import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
-
+import { postData } from 'auth/datapost';
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -40,28 +40,6 @@ const useStyles = makeStyles(styles);
 export default function Modifyuserform() {
   const {employee_number,employee_full_name,employee_mobile_number,father_full_name,father_mobile_number,joining_date,email,cnic,password} = useParams()
 
-
-  async function postData(url, data) {
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-  
-      const responseData = await response.json();
-      // console.log('Response:', responseData);
-      return responseData;
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
-}
   const [permissions,setPermissions] = useState([])
   const usern = localStorage.getItem('username')
 

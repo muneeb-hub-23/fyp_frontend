@@ -5,32 +5,9 @@ import { publicroutes,privateroutes } from './navigation';
 import { apiaddress } from './apiaddress';
 import Setpermissions from 'views/Users/Setpermissions';
 import { string } from 'prop-types';
-
+import { postData } from './datapost';
 const AuthContext = createContext();
 
-
-
-async function postData(url, data) {
-     try {
-       const response = await fetch(url, {
-         method: 'POST',
-         headers: {
-           'Content-Type': 'application/json',
-         },
-         body: JSON.stringify(data),
-       });
-   
-       if (!response.ok) {
-         throw new Error(`HTTP error! Status: ${response.status}`);
-       }
-   
-       const responseData = await response.json();
-       return responseData;
-     } catch (error) {
-     
-       console.error('Error:', error.message);
-     }
-}
 
 export const AuthData = () => useContext(AuthContext);
 

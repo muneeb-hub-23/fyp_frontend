@@ -14,7 +14,7 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import CancelIcon from '@material-ui/icons/Cancel';
 import { apiaddress } from 'auth/apiaddress';
-
+import { postData } from 'auth/datapost';
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -39,29 +39,6 @@ const useStyles = makeStyles(styles);
 export default function Adduser() {
 
 let permissionsarray = []
-
-  async function postData(url, data) {
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-  
-      const responseData = await response.json();
-      // console.log('Response:', responseData);
-      return responseData;
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
-}
-
 
 const [formData, setFormData] = useState({
   Employee_number:'',

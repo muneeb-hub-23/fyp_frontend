@@ -7,28 +7,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import { apiaddress } from 'auth/apiaddress';
 import './viewattendance.css'
-
-async function postData(url, data) {
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const responseData = await response.json();
-    // console.log('Response:', responseData);
-    return responseData;
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
-}
+import { postData } from 'auth/datapost';
 
 function Viewattendance() {
 

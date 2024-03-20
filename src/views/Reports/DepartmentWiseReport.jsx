@@ -4,7 +4,7 @@ import GridItem from 'components/Grid/GridItem'
 import Chart from 'chart.js';
 import '../Viewattendance/viewattendance.css'
 import { apiaddress } from 'auth/apiaddress';
-
+import { postData } from 'auth/datapost';
 function getTodayDate() {
   const today = new Date();
   const year = today.getFullYear();
@@ -79,27 +79,7 @@ function getDatesInRange(startDateStr, endDateStr) {
   
   return dates;
 }
-async function postData(url, data) {
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const responseData = await response.json();
-    // console.log('Response:', responseData);
-    return responseData;
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
-}
 function DepartmentWiseReport() {
 const getvalue = getTodayDate()
 const [dates,setDates] = useState({sdate:getvalue,ldate:getvalue})

@@ -8,27 +8,7 @@ import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-async function postData(url, data) {
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const responseData = await response.json();
-    // console.log('Response:', responseData);
-    return responseData;
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
-}
+import { postData } from 'auth/datapost';
 function getFormattedDate() {
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
