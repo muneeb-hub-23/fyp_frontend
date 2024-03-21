@@ -63,6 +63,7 @@ const ApiCaller1 = async(val)=>{
 
 const res5 = await postData(apiaddress+'/get-total-days',{sdate:res4.startdate,ldate:res4.enddate,stuadn:val})
 setmetadata(res5)
+console.log(res5)
 
 
   const originalDoughnutDraw = Chart.controllers.doughnut.prototype.draw;
@@ -265,7 +266,7 @@ return () => {
     for (var i=0; i<students.length; i++){
       if((students[i].admission_number).toString() === val.toString() | (students[i].student_full_name).toString() === val.toString()){
         setrunningstu(students[i])
-        console.log(runningstu)
+   
       }
   
     }
