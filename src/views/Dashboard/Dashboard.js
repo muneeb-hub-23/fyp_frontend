@@ -317,16 +317,7 @@ var myChart6 = new Chart(ctx6, {
   }
 });
 
-}, 200);
-// function toggleFullScreen() {
-//   if (!document.fullscreenElement) {
-//     document.documentElement.requestFullscreen();
-//   } else {
-//     if (document.exitFullscreen) {
-//       document.exitFullscreen();
-//     }
-//   }
-// }
+}, 100);
 
 
   return (
@@ -414,6 +405,17 @@ var myChart6 = new Chart(ctx6, {
             <p className={classes.cardCategory}>Total ICT Late</p>
             </CardFooter>
           </Card>
+        </GridItem>
+
+        <GridItem xs={12} sm={6} md={2}>
+        <Link to={'/admin/dashboardreport'}>
+          <Card>
+
+<CardBody style={{background:'linear-gradient(60deg, #26c6da, #00acc1)',borderRadius:'5px',color:'white',cursor:'pointer'}}>
+  <h3>Print Details</h3>
+</CardBody>
+          </Card>
+        </Link>
         </GridItem>
 
       </GridContainer>

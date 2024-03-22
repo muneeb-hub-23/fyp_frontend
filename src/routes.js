@@ -60,6 +60,7 @@ import ClassWiseReports from "views/Reports/ClassWiseReports";
 import DepartmentWiseReport from "views/Reports/DepartmentWiseReport";
 import Warningletters from "views/warnings/Warningletters";
 import Userlogs from "views/logs/Userlogs";
+import DashboarddReport from "views/Dashboard/DashboarddReport";
 
 const dashboardRoutes = [
   {
@@ -99,6 +100,15 @@ const dashboardRoutes = [
     icon: Dashboard,
     component: DashboardPage,
     visible:true,
+    layout: "/admin"
+  },
+  {
+    path: "/dashboardreport",
+    name: "Dashboard Report",
+    rtlName: "dashboardreport",
+    icon: Dashboard,
+    component: DashboarddReport,
+    visible:false,
     layout: "/admin"
   },
   {
