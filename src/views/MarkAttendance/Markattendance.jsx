@@ -100,20 +100,20 @@ const Markattendance = () => {
   const occurrences = blockeddates.filter(item => item === searchString).length;
 
   
-    if(dayName==='Saturday' | dayName==='Sunday'){
+    // if(dayName==='Saturday' | dayName==='Sunday'){
 
-      return(
+    //   return(
 
-        <h1>Today is a General Holiday</h1>
+    //     <h1>Today is a General Holiday</h1>
         
-      )}
-    else if(occurrences===1){
-      return(
+    //   )}
+    // else if(occurrences===1){
+    //   return(
 
-        <h1>Today is a Special Holiday</h1>
-      )
-    }
-    else{
+    //     <h1>Today is a Special Holiday</h1>
+    //   )
+    // }
+    // else{
       return (
     
     <GridContainer>
@@ -209,7 +209,7 @@ const Markattendance = () => {
     </GridContainer>
     
       );
-          }
+        //  }
 
 
 };

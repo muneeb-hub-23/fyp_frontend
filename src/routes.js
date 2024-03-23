@@ -37,9 +37,9 @@ import Adduser from "views/Users/Adduser";
 import Modifyuser from "views/Users/Modifyuser";
 import Deleteuser from "views/Users/Deleteuser";
 import Modifystu from "views/Students/Modifystu";
-import Fines from "views/Fines/fines";
-import FinesDetail from "views/Fines/finedetail";
-import Classsections from "views/classsections/classsections";
+import Fines from "views/Fines/Fines";
+import FinesDetail from "views/Fines/Finedetail";
+import Classsections from "views/classsections/Classsections";
 import Classes from "views/classsections/Classes";
 import Sections from "views/classsections/Sections";
 import Departments from "views/classsections/Departments";
@@ -61,6 +61,9 @@ import DepartmentWiseReport from "views/Reports/DepartmentWiseReport";
 import Warningletters from "views/warnings/Warningletters";
 import Userlogs from "views/logs/Userlogs";
 import DashboarddReport from "views/Dashboard/DashboarddReport";
+import Classfines from "views/Fines/Classfines";
+import Departmentfines from "views/Fines/Departmentfines";
+import View from "views/Dashboard/View";
 
 const dashboardRoutes = [
   {
@@ -68,7 +71,7 @@ const dashboardRoutes = [
     name: "view",
     rtlName: "view",
     icon: Dashboard,
-    component: Dashboard,
+    component: View,
     visible:false,
     layout: "/admin"
  
@@ -288,6 +291,24 @@ const dashboardRoutes = [
     icon: MonetizationOnIcon,
     component: Fines,
     visible:true,
+    layout: "/admin"
+  },
+  {
+    path: "/classfines",
+    name: "Class Fines",
+    rtlName: "classFines",
+    icon: MonetizationOnIcon,
+    component: Classfines,
+    visible:false,
+    layout: "/admin"
+  },
+  {
+    path: "/departmentfines",
+    name: "Department Fines",
+    rtlName: "departmentFines",
+    icon: MonetizationOnIcon,
+    component: Departmentfines,
+    visible:false,
     layout: "/admin"
   },
   {

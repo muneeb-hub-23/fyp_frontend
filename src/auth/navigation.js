@@ -12,5 +12,5 @@ export const publicroutes = [
 export const privateroutes = [
      <Route key={2} path="/admin" component={Admin} />,
      <Route key={3} path="/rtl" component={RTL} />,
-     <Redirect from="/" to="/admin/dashboard" />
+     <Redirect from="/" to="/admin" />
      ]

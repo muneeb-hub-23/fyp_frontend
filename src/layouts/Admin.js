@@ -66,7 +66,7 @@ export default function Admin({ ...rest }) {
         return null;
       })}
       
-      <Redirect from="/admin" to="/admin/dashboard" />
+   
     </Switch>
   
   );
