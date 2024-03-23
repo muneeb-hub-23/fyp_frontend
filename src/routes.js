@@ -222,6 +222,15 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
+    path: "/markattendancebydate",
+    name: "Mark Attendance By Date",
+    rtlName: "MarkAttendancebydate",
+    icon: Person,
+    component: Markattendance,
+    visible:false,
+    layout: "/admin"
+  },
+  {
     path: "/randomattendance",
     name: "Random Attendance",
     rtlName: "RandomAttendance",

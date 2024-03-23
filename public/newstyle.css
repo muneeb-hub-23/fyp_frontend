@@ -9,6 +9,13 @@
     display: inline;
     
 }
+#date{
+    font-size:1rem;
+    display:block;
+    text-align:center;
+    margin:5px auto;
+    width:50%;
+}
 .datatext{
     display: inline;
     padding-left: 10px;

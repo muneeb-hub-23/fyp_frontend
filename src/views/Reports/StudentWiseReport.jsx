@@ -120,12 +120,12 @@ const CallApi = async () => {
   setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
   labeld = re.labels
   setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
-  console.log(re)
+
   }else{
   const datesd = await getDatesByPeriod(selectedValue.duration)
   const re = await postData(apiaddress+'/student-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd,admission_number:runningstu.admission_number})
   labeld = re.labels
-  console.log(re)
+
   setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
  labeld = re.labels
  presentd=re.presentd
