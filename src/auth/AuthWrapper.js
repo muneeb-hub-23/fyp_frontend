@@ -5,7 +5,7 @@ import { publicroutes,privateroutes } from './navigation';
 import { apiaddress } from './apiaddress';
 import Setpermissions from 'views/Users/Setpermissions';
 import { string } from 'prop-types';
-import { postData } from './datapost';
+import { hashit, postData } from './datapost';
 const AuthContext = createContext();
 
 
@@ -19,12 +19,10 @@ export const AuthWrapper = () => {
 
 
      const login = async (userName, password) => {
-          
-          // Make a call to the authentication API to check the username
-          
+          const token = hashit(userName,password)
           return new Promise(async (resolve, reject) => {
 
-               const getdata = await postData(apiaddress+'/match-user',{userName,password})
+          const getdata = await postData(apiaddress+'/match-user',{userName,password})
 
                if (userName === getdata.employee_number & password === getdata.password) {
                     localStorage.setItem('auth','true')

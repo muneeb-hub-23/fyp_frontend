@@ -215,7 +215,7 @@ var myChart = new Chart(ctx, {
   }
 }); 
 
-console.log(re)
+
 
 if(selectedValue.crietaria === 'daily'){
   settablecontent(

@@ -79,6 +79,22 @@ function getDatesInRange(startDateStr, endDateStr) {
   
   return dates;
 }
+function convertDateFormat(dateString) {
+  // Check if the input string has the correct format "dYYYYMMDD"
+  if (dateString.length !== 9 || dateString[0] !== 'd') {
+    throw new Error('Invalid date format. Expected format: dYYYYMMDD');
+  }
+
+  // Extract year, month, and day from the input string
+  const year = dateString.substring(1, 5);
+  const month = dateString.substring(5, 7);
+  const day = dateString.substring(7, 9);
+
+  // Concatenate the parts with dashes to get the desired format
+  const formattedDate = `${year}-${month}-${day}`;
+
+  return formattedDate;
+}
 
 function ClassWiseReport() {
 const [classes,setClasses]=useState([])
@@ -89,6 +105,8 @@ const [dates,setDates] = useState({sdate:getvalue,ldate:getvalue})
 const [selectedValue,setSelectedValue] = useState({crietaria:'daily',duration:'thisweek'})
 const [att,setAtt] = useState({str:0,p:0,a:0,l:0,lt:0})
 const user = localStorage.getItem('username')
+const [tableContent,settablecontent] = useState();
+const [classsec,setclasssec] = useState({class:'',section:''})
 
 const CallApi = async () => {
 
@@ -99,94 +117,271 @@ const CallApi = async () => {
   var lated = []
   const an = document.getElementById('class1').value
   const bn = document.getElementById('section1').value
+   var datesd = []
+  if(selectedValue.duration === 'custom'){datesd = getDatesInRange(dates.sdate,dates.ldate)}  
+  else{datesd = getDatesByPeriod(selectedValue.duration)}
 
-  if(selectedValue.duration === 'custom'){
-  const datesd = await getDatesInRange(dates.sdate,dates.ldate)
   const re = await postData(apiaddress+'/class-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd,classn:an,section:bn})
   setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
   labeld = re.labels
-  setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
-  console.log(re)
-  }else{
-  const datesd = await getDatesByPeriod(selectedValue.duration)
-  const re = await postData(apiaddress+'/class-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd,classn:an,section:bn})
-  labeld = re.labels
-  console.log(re)
-  setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
- labeld = re.labels
- presentd=re.presentd
- absentd = re.absentd
- leaved = re.leaved
- lated = re.lated
-}
+  presentd=re.presentd
+  absentd = re.absentd
+  leaved = re.leaved
+  lated = re.lated
+
 document.getElementById('myChart').value = ''
-  var datasetd = [
-    {
-    label: 'Present',
-    data: presentd,
-    backgroundColor: [
-    'rgba(0,255,0,0.2)'
-    ],
-    borderColor: [
-    'rgba(0,255,0,1)'
-    ],
-    borderWidth: 1
-    },
-    {
-    label: 'Absent',
-    data: absentd,
-    backgroundColor: [
-    'rgba(255, 99, 132, 0.2)'
-    ],
-    borderColor: [
-      'rgba(255, 99, 132, 1)'
-    ],
-    borderWidth: 1
-    },
-    {
-    label: 'Leave',
-    data: leaved,
-    backgroundColor: [
-    'rgba(0,0,215, 0.2)'
-    ],
-    borderColor: [
-      'rgba(0,0,215, 1)'
-    ],
-    borderWidth: 1
-    },
-    {
-    label: 'Late',
-    data: lated,
-    backgroundColor: [
-    'rgba(255, 150, 0, 0.2)'
-    ],
-    borderColor: [
-      'rgba(255, 150, 0, 1)'
-    ],
-    borderWidth: 1
-    }
-    ]
-
-    var ctx =await document.getElementById('myChart').getContext('2d');
-    ctx.clearRect(0,0,100,100);
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labeld,
-            datasets: datasetd
-        },
-        options: {
-            responsive:true,
-            maintainAspectRatio:true,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
+var datasetd = [
+{
+label: 'Present',
+data: presentd,
+backgroundColor: [
+'rgba(0,255,0,0.2)'
+],
+borderColor: [
+'rgba(0,255,0,1)'
+],
+borderWidth: 1
+},
+{
+label: 'Absent',
+data: absentd,
+backgroundColor: [
+'rgba(255, 99, 132, 0.2)'
+],
+borderColor: [
+'rgba(255, 99, 132, 1)'
+],
+borderWidth: 1
+},
+{
+label: 'Leave',
+data: leaved,
+backgroundColor: [
+'rgba(0,0,215, 0.2)'
+],
+borderColor: [
+'rgba(0,0,215, 1)'
+],
+borderWidth: 1
+},
+{
+label: 'Late',
+data: lated,
+backgroundColor: [
+'rgba(255, 150, 0, 0.2)'
+],
+borderColor: [
+'rgba(255, 150, 0, 1)'
+],
+borderWidth: 1
+}
+]
+var ctx =await document.getElementById('myChart').getContext('2d');
+ctx.clearRect(0,0,100,100);
+var myChart = new Chart(ctx, {
+type: 'line',
+data: {
+    labels: labeld,
+    datasets: datasetd
+},
+options: {
+    responsive:true,
+    maintainAspectRatio:true,
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero: true
             }
+        }]
+    }
+}
+}); 
+
+
+if(selectedValue.crietaria === 'daily'){
+  settablecontent(
+    <table className='ttstable'>
+      <tbody>
+        <tr>
+          <td>
+            <p>Date</p>
+          </td>
+          <td className='prsnt'> 
+            <p>Present</p>
+          </td>
+          <td className='absnt'> 
+            <p>Absent</p>
+          </td>
+          <td className='lve'> 
+            <p>Leave</p>
+          </td>
+          <td className='lte'> 
+            <p>Late</p>
+          </td>
+        </tr>
+
+        {(re.labels).map((label, count) => (
+          <tr key={count}>
+            <td>
+              <p>{label}</p>
+            </td>
+            <td> 
+              <p>{re.presentd[count]}</p>
+            </td>
+            <td> 
+              <p>{re.absentd[count]}</p>
+            </td>
+            <td> 
+              <p>{re.leaved[count]}</p>
+            </td>
+            <td> 
+              <p>{re.lated[count]}</p>
+            </td>
+          </tr>
+        ))}
+
+      </tbody>
+    </table>
+  );
+  }
+  else if(selectedValue.crietaria === 'weekly'){
+    settablecontent(
+      <table style={{paddingLeft:'20%'}} className='ttstable'>
+        <tbody>
+          <tr>
+            <td>
+              <p>Date</p>
+            </td>
+            <td className='prsnt'> 
+              <p>Present</p>
+            </td>
+            <td className='absnt'> 
+              <p>Absent</p>
+            </td>
+            <td className='lve'> 
+              <p>Leave</p>
+            </td>
+            <td className='lte'> 
+              <p>Late</p>
+            </td>
+          </tr>
+  
+          {(re.labels).map((label, count) => (
+            <tr key={count}>
+              <td>
+                <p>{label}</p>
+              </td>
+              <td> 
+                <p>{re.presentd[count]}%</p>
+              </td>
+              <td> 
+                <p>{re.absentd[count]}%</p>
+              </td>
+              <td> 
+                <p>{re.leaved[count]}%</p>
+              </td>
+              <td> 
+                <p>{re.lated[count]}%</p>
+              </td>
+            </tr>
+          ))}
+  
+        </tbody>
+      </table>
+    );
+    }  else if(selectedValue.crietaria === 'monthly'){
+      settablecontent(
+        <table style={{paddingLeft:'20%'}} className='ttstable'>
+          <tbody>
+            <tr>
+              <td>
+                <p>Month</p>
+              </td>
+              <td className='prsnt'> 
+                <p>Present</p>
+              </td>
+              <td className='absnt'> 
+                <p>Absent</p>
+              </td>
+              <td className='lve'> 
+                <p>Leave</p>
+              </td>
+              <td className='lte'> 
+                <p>Late</p>
+              </td>
+            </tr>
+    
+            {(re.labels).map((label, count) => (
+              <tr key={count}>
+                <td>
+                  <p>{label}</p>
+                </td>
+                <td> 
+                  <p>{re.presentd[count]}%</p>
+                </td>
+                <td> 
+                  <p>{re.absentd[count]}%</p>
+                </td>
+                <td> 
+                  <p>{re.leaved[count]}%</p>
+                </td>
+                <td> 
+                  <p>{re.lated[count]}%</p>
+                </td>
+              </tr>
+            ))}
+    
+          </tbody>
+        </table>
+      );
+      }  else if(selectedValue.crietaria === 'yearly'){
+        settablecontent(
+          <table style={{paddingLeft:'20%'}} className='ttstable'>
+            <tbody>
+              <tr>
+                <td>
+                  <p>Year</p>
+                </td>
+                <td className='prsnt'> 
+                  <p>Present</p>
+                </td>
+                <td className='absnt'> 
+                  <p>Absent</p>
+                </td>
+                <td className='lve'> 
+                  <p>Leave</p>
+                </td>
+                <td className='lte'> 
+                  <p>Late</p>
+                </td>
+              </tr>
+      
+              {(re.labels).map((label, count) => (
+                <tr key={count}>
+                  <td>
+                    <p>{label}</p>
+                  </td>
+                  <td> 
+                    <p>{re.presentd[count]}%</p>
+                  </td>
+                  <td> 
+                    <p>{re.absentd[count]}%</p>
+                  </td>
+                  <td> 
+                    <p>{re.leaved[count]}%</p>
+                  </td>
+                  <td> 
+                    <p>{re.lated[count]}%</p>
+                  </td>
+                </tr>
+              ))}
+      
+            </tbody>
+          </table>
+        );
         }
-    }); 
+
+
 
 } 
 const Apiforclasssec = async () => {
@@ -194,6 +389,7 @@ const Apiforclasssec = async () => {
   setClasses(res1)
   const res2 = await postData(apiaddress+'/get-special-sections',{number:user})
   setSections(res2)
+  setstdval({classn:res1[0].class,section:res1[0].section})
   
 }
 useEffect(()=>{
@@ -229,6 +425,33 @@ setstdval({...stdval,classn:e.target.value})
 const handlesectionchange = async (e) => {
 setstdval({...stdval,section:e.target.value})
 }
+
+const toggleoption = async () => {
+  var a = document.getElementById('viewchart').style.display
+  var b = document.getElementById('documentreport').style.display
+  if(a != 'none'){
+    document.getElementById('viewchart').style.display = 'none'
+    document.getElementById('documentreport').style.display = 'block'
+    document.getElementById('togglebutton').innerText = 'Chart View'
+  }else{
+    document.getElementById('viewchart').style.display = 'block'
+    document.getElementById('documentreport').style.display = 'none'
+    document.getElementById('togglebutton').innerText = 'Document View'
+  }
+}
+const handlePrint = async () => {
+  document.body.style.visibility = 'hidden'
+
+  document.getElementById('printdata').style.visibility = 'visible'
+  document.getElementById('printdata').style.position = 'absolute';
+  document.getElementById('printdata').style.top = '0';
+  document.getElementById('printdata').style.left = '0';
+  window.print();
+  
+  document.body.style.visibility = 'visible'
+  document.getElementById('printdata').style.position = 'relative';
+  
+};
 
 
   return (
@@ -343,17 +566,67 @@ setstdval({...stdval,section:e.target.value})
 </div>
 </GridItem>
 
+<GridItem xs={12} sm={6} md={2}>
+<div className="deltabox strngth">
+  <button id='togglebutton' onClick={toggleoption}>Document View</button>
+  <button id='togglebuttonx' onClick={handlePrint}>Print</button>
+  </div>
+</GridItem>
+
 </GridContainer>
 
 </GridItem>
 
 
 <GridItem xs={12} sm={12} md={12}> 
+<div id="printdata">
+<div id="viewchart">
 <div className="piecapsule">
 <canvas className='piechart' id="myChart" />
 </div>
+</div>
+<div style={{display:'none'}} id="documentreport">
+  <table>
+    <tbody className='hellotablee'>
+      <tr>
+        <td>
+        <p>CLASS NAME</p>
+        </td>
+        <td> 
+          <p>{stdval.classn} {stdval.section}</p>
+        </td>
+      </tr>
+      
+      <tr>
+        <td>
+        <p>START DATE</p><p>{dates.sdate}</p>
+        </td>
+        <td> <p>END DATE</p><p>{dates.ldate}</p></td>
+      </tr>
+    </tbody>
+  </table>
+  <table>
+    <tbody className='hellotablee2'>
+      <tr>
+        <th><p>TOTAL STRENGTH</p></th>
+        <th><p>TOTAL PRESENT</p></th>
+        <th><p>TOTAL ABSENT</p></th>
+        <th><p>TOTAL LEAVE</p></th>
+        <th><p>TOTAL LATE</p></th>
+      </tr>
+      <tr>
+        <th><p>{att.str}</p></th>
+        <th><p>{att.p}%</p></th>
+        <th><p>{att.a}%</p></th>
+        <th><p>{att.l}%</p></th>
+        <th><p>{att.lt}%</p></th>
+      </tr>
+    </tbody>
+  </table>
 
-
+{tableContent}
+</div>
+</div>
 </GridItem>
 
 </GridContainer>

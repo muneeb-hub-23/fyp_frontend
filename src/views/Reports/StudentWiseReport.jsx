@@ -158,15 +158,21 @@ datesd = getDatesInRange(dates.sdate,dates.ldate)
 else{
 datesd =getDatesByPeriod(selectedValue.duration)
 }
-
-setddates({sdate:dates.sdate,ldate:dates.ldate})
-setattendance1([])
-setvaloftts({tp:0,ta:0,tl:0,tlt:0})
 re = await postData(apiaddress+'/student-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd,admission_number:runningstu.admission_number})
+console.log(re)
+setattendance1([])
+setddates({sdate:convertDateFormat(datesd[0]),ldate:convertDateFormat(datesd[datesd.length-1])})
+setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
 labeld = re.labels
+presentd=re.presentd
+absentd = re.absentd
+leaved = re.leaved
+lated = re.lated
+setvaloftts({tp:0,ta:0,tl:0,tlt:0})
 setpushup(re.pushup)
 setlabeld1(re.labels)
 setvaloftts({tp:re.tp1,ta:re.ta1,tl:re.tl1,tlt:re.tlt1})
+
 
 for(var i=0; i<(re.labels).length; i++){
 if(re.presentd[i]===1){
@@ -182,13 +188,6 @@ setattendance1(prevAttendance => [...prevAttendance,'No Data'])
 }
 }
 
-setddates({sdate:convertDateFormat(datesd[0]),ldate:convertDateFormat(datesd[datesd.length-1])})
-setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
-labeld = re.labels
-presentd=re.presentd
-absentd = re.absentd
-leaved = re.leaved
-lated = re.lated
 
 
 //main chartt startt here
@@ -261,6 +260,17 @@ options: {
 }); 
 //main chartt ends here
 
+var lp = 0
+var la = 0
+var ll = 0
+var llt = 0
+
+for(var h=0; h<presentd.length; h++){
+  lp = lp+presentd[h]
+  la = la+absentd[h]
+  ll = ll+leaved[h]
+  llt = llt+lated[h]
+}
 
 var ftotalp = {monday:0,tuesday:0,wednesday:0,thursday:0,friday:0}
 var ftotala = {monday:0,tuesday:0,wednesday:0,thursday:0,friday:0}
@@ -406,10 +416,33 @@ settablecontent(
           <p>TOTAL PRESENT</p>
         </td>
         <td> 
-          <p>{tts.tp}</p>
+          <p>{re.tp1}</p>
         </td>
       </tr>
-      {/* Include other rows as needed */}
+      <tr>
+        <td>
+          <p>TOTAL ABSENT</p>
+        </td>
+        <td> 
+          <p>{re.ta1}</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>TOTAL LEAVE</p>
+        </td>
+        <td> 
+          <p>{re.tl1}</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>TOTAL LATE</p>
+        </td>
+        <td> 
+          <p>{re.tlt1}</p>
+        </td>
+      </tr>
     </tbody>
   </table>
 );
@@ -517,7 +550,7 @@ pushup.map((push)=>(
 <p>{labeld.length}</p>
 </td>
 <td className='strngth'> 
-<p>{labeld.length*5}</p>
+<p></p>
 </td>
 <td className='strngth'>
 <p>{loco.p}</p>
@@ -685,9 +718,132 @@ pushup.map((push)=>(
     </tbody>
   </table>
 );
-}else{
-settablecontent('abc')
-}
+}else if(selectedValue.crietaria === 'monthly'){
+  settablecontent(
+    <table style={{paddingLeft:'20%'}} className='ttstable'>
+      <tbody>
+        <tr>
+          <td>
+            <p>Month</p>
+          </td>
+          <td className='prsnt'> 
+            <p>Present</p>
+          </td>
+          <td className='absnt'> 
+            <p>Absent</p>
+          </td>
+          <td className='lve'> 
+            <p>Leave</p>
+          </td>
+          <td className='lte'> 
+            <p>Late</p>
+          </td>
+        </tr>
+
+        {(re.labels).map((label, count) => (
+          <tr key={count}>
+            <td>
+              <p>{label}</p>
+            </td>
+            <td> 
+              <p>{re.presentd[count]}</p>
+            </td>
+            <td> 
+              <p>{re.absentd[count]}</p>
+            </td>
+            <td> 
+              <p>{re.leaved[count]}</p>
+            </td>
+            <td> 
+              <p>{re.lated[count]}</p>
+            </td>
+          </tr>
+        ))}
+
+        <tr>
+          <td>
+            <p>TOTAL</p>
+          </td>
+          <td className='prsnt'> 
+            <p>{lp}</p>
+          </td>
+          <td className='absnt'> 
+            <p>{la}</p>
+          </td>
+          <td className='lve'> 
+            <p>{ll}</p>
+          </td>
+          <td className='lte'> 
+            <p>{llt}</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  );
+  }  else if(selectedValue.crietaria === 'yearly'){
+    settablecontent(
+      <table style={{paddingLeft:'20%'}} className='ttstable'>
+        <tbody>
+          <tr>
+            <td>
+              <p>Year</p>
+            </td>
+            <td className='prsnt'> 
+              <p>Present</p>
+            </td>
+            <td className='absnt'> 
+              <p>Absent</p>
+            </td>
+            <td className='lve'> 
+              <p>Leave</p>
+            </td>
+            <td className='lte'> 
+              <p>Late</p>
+            </td>
+          </tr>
+  
+          {(re.labels).map((label, count) => (
+            <tr key={count}>
+              <td>
+                <p>{label}</p>
+              </td>
+              <td> 
+                <p>{re.presentd[count]}</p>
+              </td>
+              <td> 
+                <p>{re.absentd[count]}</p>
+              </td>
+              <td> 
+                <p>{re.leaved[count]}</p>
+              </td>
+              <td> 
+                <p>{re.lated[count]}</p>
+              </td>
+            </tr>
+          ))}
+
+<tr>
+          <td>
+            <p>TOTAL</p>
+          </td>
+          <td className='prsnt'> 
+            <p>{lp}</p>
+          </td>
+          <td className='absnt'> 
+            <p>{la}</p>
+          </td>
+          <td className='lve'> 
+            <p>{ll}</p>
+          </td>
+          <td className='lte'> 
+            <p>{llt}</p>
+          </td>
+        </tr>
+  
+        </tbody>
+      </table>
+    );
+    }
 
 } 
 
