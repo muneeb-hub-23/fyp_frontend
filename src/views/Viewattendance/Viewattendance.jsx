@@ -273,23 +273,26 @@ return () => {
   
     await ApiCaller1(val)
   }
+
   const handleclasschange = async (e) => {
 
-    const section1 = document.getElementById('section1').value
-    const data = await postData(apiaddress+"/get-students-list",{class1:e.target.value,section1})
+    const section1 = document.getElementById('class1').value
+    const a = classes[section1].class
+    const b = classes[section1].section
+    const data = await postData(apiaddress+"/get-students-list",{class1:a,section1:b})
     setstudents(data)
     setrunningstu(data[0])
     ApiCaller1(data[0].admission_number)
 
   }
-  const handlesectionchange = async (e) => {
-    const class1 = document.getElementById('class1').value
-    const data = await postData(apiaddress+"/get-students-list",{class1,section1:e.target.value})
-    setstudents(data)
-    setrunningstu(data[0])
-    ApiCaller1(data[0].admission_number)
+  // const handlesectionchange = async (e) => {
+  //   const class1 = document.getElementById('class1').value
+  //   const data = await postData(apiaddress+"/get-students-list",{class1,section1:e.target.value})
+  //   setstudents(data)
+  //   setrunningstu(data[0])
+  //   ApiCaller1(data[0].admission_number)
 
-  }
+  // }
   return (
 <>
 <div className='a11'>
@@ -327,17 +330,17 @@ return () => {
 
   </select>
 </GridItem>
-<GridItem xs={12} sm={6} md={2}>  
+<GridItem xs={12} sm={6} md={3}>  
 <select className='viewdepname' name="class" id="class1" onChange={handleclasschange}>
 
         
-{classes.map((classes)=>(
-                        <option value={classes.class}>{classes.class}</option>
+{classes.map((classes,count)=>(
+                        <option value={count}>{classes.class} {classes.section}</option>
                       ))}
 
 </select>
 </GridItem>
-<GridItem xs={12} sm={6} md={2}> 
+{/* <GridItem xs={12} sm={6} md={2}> 
 <select className='viewdepname' name="class" id="section1" onChange={handlesectionchange}>
 
 {sections.map((sections)=>(
@@ -345,7 +348,7 @@ return () => {
                       ))}
 
 </select>
-</GridItem>
+</GridItem> */}
   
 </GridContainer>
 </div>

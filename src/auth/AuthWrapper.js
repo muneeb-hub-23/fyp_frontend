@@ -12,24 +12,26 @@ const AuthContext = createContext();
 export const AuthData = () => useContext(AuthContext);
 
 export const AuthWrapper = () => {
-     let iser = localStorage.getItem('username')
+
+     
+
      const [ user, setUser ] = useState({name: "", isAuthenticated: false})
      const [permissions,setPermissions] = useState([])
-
 
 
      const login = async (userName, password) => {
           const token = hashit(userName,password)
           return new Promise(async (resolve, reject) => {
 
-          const getdata = await postData(apiaddress+'/match-user',{userName,password})
+          const getdata = await postData(apiaddress+'/match-user',{userName:token})
+          
+               if (userName === getdata.employee_number & token === getdata.emp_token) {
+                    localStorage.setItem('user',getdata.employee_full_name)
+                    localStorage.setItem('username',getdata.emp_token)
 
-               if (userName === getdata.employee_number & password === getdata.password) {
-                    localStorage.setItem('auth','true')
-                    localStorage.setItem('username',userName)
                     setUser({name: userName, isAuthenticated: true})
 
-                    const getpermissions = await postData(apiaddress+'/get-permissions',{usern:userName})
+                    const getpermissions = await postData(apiaddress+'/get-permissions',{usern:token})
                     setPermissions(getpermissions)
 
 
@@ -42,23 +44,25 @@ export const AuthWrapper = () => {
           
           
      }
+
      const logout = () => {
   
           setUser({...user, isAuthenticated: false})
-          localStorage.setItem('auth',false)
-          localStorage.setItem('username','')
+          localStorage.setItem('user','null')
+          localStorage.setItem('username','null')
      }
 
-
-     useEffect(()=>{
-          const getperm = async () => {
+     const getperm = async () => {
+          
           const usern = localStorage.getItem('username')
           const getpermissions = await postData(apiaddress+'/get-permissions',{usern})
           setPermissions(getpermissions)
           }
+          useEffect(()=>{
           getperm()
           },[])
-if(user.isAuthenticated | localStorage.getItem('auth')==='true'){
+
+if(localStorage.getItem('username').length === 64){
 
      return (
                <AuthContext.Provider value={{user,permissions, login, logout}}>

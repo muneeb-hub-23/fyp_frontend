@@ -231,7 +231,7 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/randomattendance",
+    path: "/randomattendance/:date",
     name: "Random Attendance",
     rtlName: "RandomAttendance",
     icon: Person,

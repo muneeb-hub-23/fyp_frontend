@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { apiaddress } from 'auth/apiaddress';
-
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import { postData } from 'auth/datapost';
+
+
+
 function getFormattedDate() {
+  
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
@@ -45,17 +47,21 @@ const Markattendance = () => {
       setSections(res2)
       const res3 = await postData(apiaddress+'/get-blocked-dates',{number:user})
       setblockeddates(res3.resdates)
+      const response2 = await postData(apiaddress+'/get-students-list', {class1:res1[0].class,section1:res1[0].section});
+      setStudents(response2)
     } catch (error) {
       console.log(error);
     }
   
   };
   const handleDropdownChange = async (event) => {
+    var a = classes[event.target.value].class
+    var b =classes[event.target.value].section
     setSelectedValue({
       ...selectedValue,
-      [event.target.id]: event.target.value,
+    classn:a,
+    section:b
     });
-    setIndex(0);
     await ApiCaller3()
   };
   const ApiCaller2 = async (props) => {
@@ -71,11 +77,12 @@ const Markattendance = () => {
 
   const ApiCaller3 = async (props) => {
     try {  
-      const class1 = document.getElementById('classn').value
-      const section = document.getElementById('section').value
+      const class1 = classes[document.getElementById('classn').value].class
+      const section1 = classes[document.getElementById('classn').value].section
+      
       setTimeout(async () => {
 
-        const response2 = await postData(apiaddress+'/get-students-list', {class1:class1,section1:section});
+        const response2 = await postData(apiaddress+'/get-students-list', {class1,section1});
         setStudents(response2)
       }, 200);      
     } catch (error) {
@@ -94,6 +101,7 @@ const Markattendance = () => {
 
       if(document.getElementById('datepick') != null){
       document.getElementById('datepick').innerHTML = `<input id='date' type="date" value=${formatDate(date)} onChange=${handledatechange}/>`
+        
     }
 
   }
@@ -145,7 +153,7 @@ function reverseformatDate(inputDate) {
     const tb = async () => {
       await handledatepermission()
       await ApiCaller()
-      await ApiCaller3()
+      //await ApiCaller3()
     }
     tb();
   },[])
@@ -189,22 +197,19 @@ function reverseformatDate(inputDate) {
 
                 <GridItem xs={12} sm={12} md={12}>
                   <div id="datepick"></div>
-        {/* {check?(<input style={datestyle} id='date' type="date" value={formatDate(date)} onChange={handledatechange}/>):('')}        */}
               </GridItem>
 
-                <GridItem xs={12} sm={6} md={5}>
+              <GridItem xs={8} sm={6} md={8}>
+<select className='nativesize' id="classn" onChange={handleDropdownChange}>
+         
+        {classes.map((classes,count)=>(
+                       <option value={count}>{classes.class} {classes.section}</option>
+                     ))}
+   
+               </select>
+ </GridItem>
     
-         <select className='nativesize' id="classn" value={selectedValue.classn} onChange={handleDropdownChange}>
-        
-         {classes.map((classes)=>(
-                        <option value={classes.class}>{classes.class}</option>
-                      ))}
-    
-                </select>
-    
-                </GridItem>
-    
-                <GridItem xs={12} sm={12} md={5}>
+                {/* <GridItem xs={12} sm={12} md={5}>
     
           <select className='nativesize' id="section" value={selectedValue.section} onChange={handleDropdownChange}>
           {sections.map((sections)=>(
@@ -212,7 +217,7 @@ function reverseformatDate(inputDate) {
                       ))}
             </select>
     
-            </GridItem>
+            </GridItem> */}
     
             <GridItem xs={12} sm={6} md={5}>
             <p className='nativesize'>Admission Number</p>
@@ -261,7 +266,7 @@ function reverseformatDate(inputDate) {
          
     
     
-        <Link to={'/admin/randomattendance'}>
+        <Link to={'/admin/randomattendance/'+date}>
           <h3 className='hyperh3'>Random Attendance</h3>
           </Link>
     

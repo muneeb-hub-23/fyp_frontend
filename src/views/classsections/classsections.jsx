@@ -1,41 +1,60 @@
-import React from "react";
-// react plugin for creating charts
-import ChartistGraph from "react-chartist";
-// @material-ui/core
+import React,{useState,useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
-// @material-ui/icons
-
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime";
-// core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
 import bgimg from '../../assets/img/classes.jpeg'
 import bgimg2 from '../../assets/img/sections.jpg'
 import bgimg3 from '../../assets/img/departments.jpg'
 import bgimg4 from '../../assets/img/shifts.png'
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { apiaddress } from "auth/apiaddress";
-import { bugs, website, server } from "variables/general.js";
-import {
-  dailySalesChart,
-  emailsSubscriptionChart,
-  completedTasksChart
-} from "variables/charts.js";
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+import { postData } from "auth/datapost";
 const useStyles = makeStyles(styles);
 export default function Classsections() {
   const classes = useStyles();
+  function countStringOccurrences(arr, targetString) {
+    let count = 0;
+  
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === targetString) {
+        count++;
+      }
+    }
+  
+    return count;
+  }
+  const [perm,setperm] = useState({a:false,b:false,c:false,d:false})
+  const caller = async () => {
+    const usern = localStorage.getItem('username')
+    const res = await postData(apiaddress+'/get-permissions',{usern})
+
+    if(countStringOccurrences(res,'Classes')===1){
+      setperm(prevPerm => ({ ...prevPerm, a: true }));
+    }
+    if(countStringOccurrences(res,'Sections')===1){
+      setperm(prevPerm => ({ ...prevPerm, b: true }));
+    }
+    if(countStringOccurrences(res,'Departments')===1){
+      setperm(prevPerm => ({ ...prevPerm, c: true }));
+    }
+    if(countStringOccurrences(res,'Shifts')===1){
+      setperm(prevPerm => ({ ...prevPerm, d: true }));
+    }
+    
+  }
+  useEffect(()=>{
+    caller()
+  },[])
   return (
     <div>
 
       <GridContainer justify="center" alignItems="center" spacing={1}>
-   
-
+    
+        {perm.a?(
         <GridItem xs={12} sm={12} md={5}>
         <Link to="/admin/classes">
           <Card chart>
@@ -49,9 +68,9 @@ export default function Classsections() {
           </Card>
           </Link>
         </GridItem>
-
+):('')}
     
-
+        {perm.b?(
         <GridItem xs={12} sm={12} md={5}>
         <Link to="/admin/sections">
           <Card chart>
@@ -64,8 +83,8 @@ export default function Classsections() {
           </Card>
           </Link>
         </GridItem>
-     
-
+     ):('')}
+        {perm.c?(
         <GridItem xs={12} sm={12} md={5}>
         <Link to="/admin/departments">
 
@@ -81,8 +100,8 @@ export default function Classsections() {
           </Link>
 
         </GridItem>
-
-
+):('')}
+        {perm.d?(
         <GridItem xs={12} sm={12} md={5}>
         <Link to="/admin/shifts">
 
@@ -98,7 +117,7 @@ export default function Classsections() {
           </Link>
 
         </GridItem>
-
+):('')}
 
       </GridContainer>
 

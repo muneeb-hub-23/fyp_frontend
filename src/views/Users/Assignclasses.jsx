@@ -40,13 +40,14 @@ const classes = useStyles()
 const [classes1,setClasses]=useState([])
 const [sections,setSections] = useState([])
 const [employees,setEmployees] = useState([])
-const [selectedValue, setSelectedValue] = useState({classn:'1st-year',section:'a',employee_number:0});
+const [selectedValue, setSelectedValue] = useState({classn:'1st-year',section:'a',employee_number:0,employee_full_name:''});
 const [assignedclasses,setassignedclasses] = useState([])
 const handleDropdownChange = async (event) => {
     try{
     setSelectedValue({
       classn:document.getElementById('classn').value,
       section:document.getElementById('section').value,
+      employee_full_name:document.getElementById('employeename').value,
       employee_number:document.getElementById('employee').value
     });
     return
@@ -97,6 +98,12 @@ useEffect(()=>{
                 <GridItem  xs={12} sm={6} md={3}>
                 <select className='myselectdropdown' id="employee" value={selectedValue.employee_number} onChange={handleDropdownChange}>
                 {employees.map((employee)=>(<option value={employee.employee_number}>{employee.employee_number}</option>))}
+                </select>
+                </GridItem>
+
+                <GridItem  xs={12} sm={6} md={3}>
+                <select className='myselectdropdown' id="employeename" value={selectedValue.employee_full_name} onChange={handleDropdownChange}>
+                {employees.map((employee)=>(<option value={employee.employee_full_name}>{employee.employee_full_name}</option>))}
                 </select>
                 </GridItem>
             

@@ -131,21 +131,7 @@ const handleSubmit = async (e) => {
   //document.getElementById('errormessage').classList.toggle('msgboxshow')
   e.preventDefault();
 await ApiCaller(formData);
-  // setFormData({
-  //   admission_number: '',
-  //   roll_no: '',
-  //   student_full_name: '',
-  //   joining_date: '2023-09-01',
-  //   email: '',
-  //   cnic: '',
-  //   department: '',
-  //   class1: '',
-  //   section: '',
-  //   shift: '',
-  //   student_mobile_number: '',
-  //   father_full_name: '',
-  //   father_mobile_number: '',
-  // });
+window.location.href = '/admin/modifystudent'
 return
 
 

@@ -92,9 +92,9 @@ function Warningletters() {
 
   }, []);
   const handleDropdownChange = async () => {
-
-      const tclass = document.getElementById("classn").value
-      const tsection = document.getElementById("section").value
+      const txa = document.getElementById("classn").value
+      const tclass = classes[txa].class
+      const tsection = classes[txa].section
       const tsession = document.getElementById("session").value
       ApiCaller3(tclass,tsection,tsession)
 
@@ -135,20 +135,20 @@ function Warningletters() {
 <GridItem xs={12} sm={3} md={3}>
 <select className='viewdepname' id="classn" onChange={handleDropdownChange}>
         
-        {classes.map((classes)=>(
-                       <option value={classes.class}>{classes.class}</option>
+        {classes.map((classes,count)=>(
+                       <option value={count}>{classes.class} {classes.section}</option>
                      ))}
    
                </select>
 </GridItem>
 
-<GridItem xs={12} sm={3} md={3}>
+{/* <GridItem xs={12} sm={3} md={3}>
 <select className='viewdepname' id="section" onChange={handleDropdownChange}>
           {sections.map((sections)=>(
                         <option value={sections.section}>{sections.section}</option>
                       ))}
             </select>
-</GridItem>
+</GridItem> */}
 
 </GridContainer>
 </div>

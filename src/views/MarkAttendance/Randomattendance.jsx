@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
-
-
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
@@ -10,6 +6,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import { apiaddress } from 'auth/apiaddress';
 import { postData } from 'auth/datapost';
+import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
 let s1 = {fontSize:'1.5rem',margin:'5px',backgroundColor:'rgb(140, 233, 0)',padding:'3px',width:'80px',':hover':{backgroundColor:'white'}}
 let s2 = {fontSize:'1.5rem',margin:'5px',backgroundColor:'red',padding:'3px',width:'80px'}
 let s3 = {fontSize:'1.5rem',margin:'5px',backgroundColor:'rgb(4, 166, 253)',padding:'3px',width:'80px'}
@@ -18,11 +15,10 @@ let s4 = {fontSize:'1.5rem',margin:'5px',backgroundColor:'rgba(253, 170, 4, 0.65
 const Randomattendance = ()=> {
 
   const user = localStorage.getItem('username')
-  const fulldate = new Date().toISOString().split('-')[0];
-  const [test,settest] = useState(0);
+  const {date} = useParams();
   const [classes,setClasses]=useState([])
   const [sections,setSections] = useState([])
-  const [selectedValue, setSelectedValue] = useState({classn: '',section: '',date: fulldate,status:''});
+  const [selectedValue, setSelectedValue] = useState({classn: '',section: '',date: date,status:''});
   const [students1, setStudents] = useState([{
     admission_number: 0,
     roll_no: 0,
@@ -32,7 +28,8 @@ const Randomattendance = ()=> {
   const ApiCaller2 = async (props) => {
     try {  
       console.log(props)
-      postData(apiaddress+'/mark-attendance',{ admission_number:props[0] ,status:props[1] });
+
+      postData(apiaddress+'/mark-attendance',{ admission_number:props[0] ,status:props[1],date});
       
     } catch (error) {
       console.log(error);
@@ -51,8 +48,8 @@ const Randomattendance = ()=> {
   };
   const ApiCaller3 = async (props) => {
     try {  
-      const cs1 = document.getElementById('classn').value
-      const ss1 = document.getElementById('section').value
+      const cs1 = classes[document.getElementById('classn').value].class
+      const ss1 = classes[document.getElementById('classn').value].section
       setTimeout(async () => {
 
         const response2 = await postData(apiaddress+'/student-is-listing', {class1:cs1,section1:ss1});
@@ -64,9 +61,12 @@ const Randomattendance = ()=> {
 
   };
   const handleDropdownChange = async (event) => {
+    var a = classes[event.target.value].class
+    var b =classes[event.target.value].section
     setSelectedValue({
       ...selectedValue,
-      [event.target.id]: event.target.value,
+    classn:a,
+    section:b
     });
     await ApiCaller3()
   };
@@ -80,7 +80,6 @@ const Randomattendance = ()=> {
       setTimeout(async () => {
         const response2 = await postData(apiaddress+'/student-is-listing', {class1:res1[0].class,section1:res1[0].section});
         setStudents(response2)
-        console.log(response2)
       }, 200);
     } catch (error) {
       console.log(error);
@@ -111,22 +110,22 @@ const Randomattendance = ()=> {
 
 
 <GridItem xs={12} sm={6} md={5}>
-<select className='nativesize' id="classn" value={selectedValue.classn} onChange={handleDropdownChange}>
-        
-        {classes.map((classes)=>(
-                       <option value={classes.class}>{classes.class}</option>
+<select className='nativesize' id="classn" onChange={handleDropdownChange}>
+         
+        {classes.map((classes,count)=>(
+                       <option value={count}>{classes.class} {classes.section}</option>
                      ))}
    
                </select>
  </GridItem>
 
-<GridItem xs={12} sm={12} md={5}>
+{/* <GridItem xs={12} sm={12} md={5}>
 <select className='nativesize' id="section" value={selectedValue.section} onChange={handleDropdownChange}>
           {sections.map((sections)=>(
                         <option value={sections.section}>{sections.section}</option>
                       ))}
             </select>
-</GridItem>
+</GridItem> */}
 
 <ul className='myul randomattendancelist'>
 

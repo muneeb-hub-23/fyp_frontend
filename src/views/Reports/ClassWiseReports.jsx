@@ -115,8 +115,9 @@ const CallApi = async () => {
   var absentd = []
   var leaved = []
   var lated = []
-  const an = document.getElementById('class1').value
-  const bn = document.getElementById('section1').value
+  const anx = document.getElementById('class1').value
+  const an = classes[anx].class
+  const bn = classes[anx].section
    var datesd = []
   if(selectedValue.duration === 'custom'){datesd = getDatesInRange(dates.sdate,dates.ldate)}  
   else{datesd = getDatesByPeriod(selectedValue.duration)}
@@ -420,11 +421,17 @@ const handleduration = async (e) => {
 }
 
 const handleclasschange = async (e) => {
-setstdval({...stdval,classn:e.target.value})
-}
-const handlesectionchange = async (e) => {
-setstdval({...stdval,section:e.target.value})
-}
+  const thrust = document.getElementById('class1').value
+  const cla = classes[thrust].class
+  const sec = classes[thrust].section
+
+  setstdval({...stdval,classn:cla,section:sec})
+
+  
+  }
+// const handlesectionchange = async (e) => {
+// setstdval({...stdval,section:e.target.value})
+// }
 
 const toggleoption = async () => {
   var a = document.getElementById('viewchart').style.display
@@ -465,14 +472,14 @@ const handlePrint = async () => {
 <select className='viewdepname' name="class" id="class1" onChange={handleclasschange}>
 
         
-{classes.map((classes)=>(
-                        <option value={classes.class}>{classes.class}</option>
+{classes.map((classes,count)=>(
+                        <option value={count}>{classes.class} {classes.section}</option>
                       ))}
 
 </select>
 </GridItem>
 
-<GridItem xs={12} sm={4} md={3}> 
+{/* <GridItem xs={12} sm={4} md={3}> 
 <select className='viewdepname' name="class" id="section1" onChange={handlesectionchange}>
 
 {sections.map((sections)=>(
@@ -480,7 +487,7 @@ const handlePrint = async () => {
                       ))}
 
 </select>
-</GridItem>
+</GridItem> */}
 
 <GridItem xs={12} sm={4} md={3}>
 <select id='crietaria' className='viewdepname' value={selectedValue.crietaria} onChange={handlecrietaria}>

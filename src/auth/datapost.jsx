@@ -22,8 +22,8 @@ const postDatax = async (url, data) => {
     console.error('Error:', error.message);
   }
 }
-const username = localStorage.getItem('username')
-const token = localStorage.getItem('auth')
+const username = localStorage.getItem('user')
+const token = localStorage.getItem('username')
 export const postData = async (url, data) => {
     try {
    
@@ -54,5 +54,6 @@ export const hashit = (a,b) => {
   const combinedInput = a+b;
   const sha256Hash = CryptoJS.SHA256(combinedInput).toString();
   return sha256Hash
+ 
 
 };

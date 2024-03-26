@@ -921,11 +921,20 @@ const handleduration = async (e) => {
   }
 }
 const handleclasschange = async (e) => {
-setstdval({...stdval,classn:e.target.value})
+const thrust = document.getElementById('class1').value
+const cla = classes[thrust].class
+const sec = classes[thrust].section
+console.log(cla,sec)
+setstdval({...stdval,classn:cla,section:sec})
+const res3 = await postData(apiaddress+'/get-students-list',{class1:cla,section1:sec})
+setstudents(res3)
+setselect({roll_no:res3[0].admission_number,name:res3[0].student_full_name})
+setrunningstu(res3[0])
+
 }
-const handlesectionchange = async (e) => {
-setstdval({...stdval,section:e.target.value})
-}
+// const handlesectionchange = async (e) => {
+// setstdval({...stdval,section:e.target.value})
+// }
 const handlestuchange = async (e) => {
   var namee = ''
   for(var i=0; i<students.length; i++){
@@ -1001,9 +1010,6 @@ const handlePrint = async () => {
   
 };
 
-
-
-
 const handlecrietaria = async (e) => {
   setSelectedValue({...selectedValue,crietaria:e.target.value})
 
@@ -1020,14 +1026,14 @@ const handlecrietaria = async (e) => {
 <select className='viewdepname' name="class" id="class1" onChange={handleclasschange}>
 
         
-{classes.map((classes)=>(
-                        <option value={classes.class}>{classes.class}</option>
+{classes.map((classes,count)=>(
+                        <option value={count}>{classes.class} {classes.section}</option>
                       ))}
 
 </select>
 </GridItem>
 
-<GridItem xs={12} sm={4} md={3}> 
+{/* <GridItem xs={12} sm={4} md={3}> 
 <select className='viewdepname' name="class" id="section1" onChange={handlesectionchange}>
 
 {sections.map((sections)=>(
@@ -1035,7 +1041,7 @@ const handlecrietaria = async (e) => {
                       ))}
 
 </select>
-</GridItem>
+</GridItem> */}
 
 <GridItem xs={12} sm={4} md={3}>
   <select className='viewdepname h2' name="class" id="name" value={select.name} onChange={handlestuchange1}>

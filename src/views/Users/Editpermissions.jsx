@@ -63,7 +63,7 @@ useEffect(()=>{
 const runit = async () =>{
 state = await thedata()
 statestr = await thedatastr()
-const getpermissions = await postData(apiaddress+'/get-permissions',{usern:employee_number})
+const getpermissions = await postData(apiaddress+'/get-permissions',{usern:password})
 getpermissions.map((perm)=>(
     userpermissions.push(perm) 
 ))

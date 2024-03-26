@@ -247,9 +247,10 @@ const Classfines = () => {
     ApiCaller2();
   }, []);
   const ApiCaller3 = async (props) => {
+    const vsx = document.getElementById('classn').value
     try {
         
-        const response2 = await postData(apiaddress+'/get-students-list', {class1:document.getElementById('classn').value,section1:document.getElementById('section').value});
+        const response2 = await postData(apiaddress+'/get-students-list', {class1:classes[vsx].class,section1:classes[vsx].section});
         setData(response2)
 
     } catch (error) {
@@ -398,9 +399,10 @@ const Classfines = () => {
 
   const handleDropdownChange = async () => {
     try{
-    await setSelectedValue({
-      classn: document.getElementById("classn").value,
-      section: document.getElementById("section").value,
+    const vsx = document.getElementById("classn").value
+    setSelectedValue({
+      classn: classes[vsx].class,
+      section: classes[vsx].section,
       sdate: convertDateFormat(document.getElementById("sdate").value),
       ldate: convertDateFormat(document.getElementById("ldate").value),
     });
@@ -426,22 +428,22 @@ const Classfines = () => {
         <GridContainer justify="center" alignItems="center" spacing={1}>
 
           <GridItem xs={12} sm={6} md={2}>
-          <select className='viewdepname' id="classn" value={selectedValue.classn} onChange={handleDropdownChange}>
+          <select className='viewdepname' id="classn" onChange={handleDropdownChange}>
         
-        {classes.map((classes)=>(
-                       <option value={classes.class}>{classes.class}</option>
+        {classes.map((classes,count)=>(
+                       <option value={count}>{classes.class} {classes.section}</option>
                      ))}
    
                </select>
           </GridItem>
-
+{/* 
           <GridItem xs={12} sm={6} md={2}>
           <select className='viewdepname' id="section" value={selectedValue.section} onChange={handleDropdownChange}>
           {sections.map((sections)=>(
                         <option value={sections.section}>{sections.section}</option>
                       ))}
             </select>
-          </GridItem>
+          </GridItem> */}
 
           <GridItem xs={12} sm={6} md={2}>
             <input
