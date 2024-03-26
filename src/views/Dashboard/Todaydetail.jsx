@@ -49,7 +49,7 @@ function Todaydetail() {
         data: {
             labels: ["Strength","Present","Absent","Leave","Late"],
             datasets: [{
-                label: '1st-Year-A',
+                label: classn+' '+section,
                 data: barData,
                 backgroundColor: [
                     '#ec407a',

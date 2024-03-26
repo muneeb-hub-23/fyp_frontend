@@ -9,54 +9,70 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { apiaddress } from "auth/apiaddress";
 import { postData } from "auth/datapost";
 
+function countStringOccurrences(arr, targetString) {
+  let count = 0;
+
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === targetString) {
+      count++;
+    }
+  }
+
+  return count;
+}
 function DashboarddReport() {
-    
+
 const [tstrength,setTStrength] = React.useState({strength:0})
 const [tpresent,setPresent] = React.useState({present:0})
 const [tabsent,setAbsent] = React.useState({absent:0})
 const [tleave,setLeave] = React.useState({leaves:0})
 const[lates,setlates] = React.useState({lates:0})
-const[data,setData] = React.useState([[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]])
-var data1 = data[0]
-var data2 = data[1]
-var data3 = data[2]
-var data4 = data[3]
-var data5 = data[4]
-var data6 = data[5]
+const[data,setData] = React.useState([[0,4,0,0,0]])
+const [permissions,Setpermissions] = React.useState({morning:false,evening:false})
+const [classsections,setclasssections] = useState([{class:'',section:''}])
+
+
+
 const ApiCaller = async ()=>{
-try{
-    const response0 = await postData(apiaddress+'/today-ict-strength', {hello:'true'});
-    setTStrength(response0)
+
+      const resx = await postData(apiaddress + "/get-permissions",{usern:localStorage.getItem('username')})
+      const a = countStringOccurrences(resx,'morning')
+      const b = countStringOccurrences(resx, 'evening')
+      if(a === 1){
+
+      Setpermissions(prevpermissions => ({ ...prevpermissions, morning:true }))
+      }
+      if(b === 1){
+      Setpermissions(prevpermissions => ({ ...prevpermissions,evening:true}))
+      }
+      if((a+b)<2){
+        document.getElementById('shift').style.visibility = 'hidden'
+      }
+      const rax = await postData(apiaddress+'/get-special-classes',{number:localStorage.getItem('username')})
+      console.log(rax)
+      setclasssections(rax)
+      const response0 = await postData(apiaddress+'/today-ict-strength', {shift:document.getElementById('shift').value});
+      setTStrength(response0)
+      const response1 = await postData(apiaddress+'/today-ict-present', {shift:document.getElementById('shift').value});
+      setPresent(response1)
+      const response2 = await postData(apiaddress+'/today-ict-absent', {shift:document.getElementById('shift').value});
+      setAbsent(response2)
+      const response3 = await postData(apiaddress+'/today-ict-leave', {shift:document.getElementById('shift').value});
+      setLeave(response3)
+      const response4 = await postData(apiaddress+'/today-ict-lates', {shift:document.getElementById('shift').value});
+      setlates(response4)
+      const response5 = await postData(apiaddress+'/dashboard-charts', {classsections:rax});
+      setData(response5)
     
 
-    const response1 = await postData(apiaddress+'/today-ict-present', {hello:'true'});
-    setPresent(response1)
+      
 
-    const response2 = await postData(apiaddress+'/today-ict-absent', {hello:'true'});
-    setAbsent(response2)
-
-    const response3 = await postData(apiaddress+'/today-ict-leave', {hello:'true'});
-    setLeave(response3)
-
-    const response4 = await postData(apiaddress+'/today-ict-lates', {hello:'true'});
-    setlates(response4)
-
-    const response5 = await postData(apiaddress+'/dashboard-charts', {hello:'true'});
-    setData(response5)
-
-
-    return
-}catch (err){
-
-    console.log(err)
-
-}
-
-}
-React.useEffect(() => {
-ApiCaller();
-}, []);  
-
+      return
+  }
+  React.useEffect(() => {
+    ApiCaller();
+  
+  }, []); 
 const handlePrint = async () => {
 document.body.style.visibility = 'hidden'
 document.getElementById('abcdefg').style.visibility = 'visible'
@@ -65,29 +81,32 @@ window.print();
 document.body.style.visibility = 'visible'
 
 };
-
 const colorpick = (color) => {
-switch(color){
-    case('odd'):
+    const mct = color % 2
+switch(mct){
+    case(0):
     return {backgroundColor:'white'}
-    break;
-
-    case('even'):
+    case(1):
     return {backgroundColor:'rgba(233, 30, 99,.4)',border:'none'}
-    break;
-
-    case('total'):
-    return {backgroundColor:'#00acc1',color:'white',fontWeight:'bold'}
-    break;
-    case('print'):
-    return {backgroundColor:'#00acc1',color:'white',fontWeight:'bold',margin:'0 auto',height:'50px',width:'150px',border:'none',borderRadius:'5px',cursor:'pointer'}
-    break;
-
     default:
-    return {backgroundColor:'black'}
-    break;
+    return {backgroundColor:'black',color:'white'}
 }
 }
+const rewrite = async () =>{
+    const response0 = await postData(apiaddress+'/today-ict-strength', {shift:document.getElementById('shift').value});
+    setTStrength(response0)
+    const response1 = await postData(apiaddress+'/today-ict-present', {shift:document.getElementById('shift').value});
+    setPresent(response1)
+    const response2 = await postData(apiaddress+'/today-ict-absent', {shift:document.getElementById('shift').value});
+    setAbsent(response2)
+    const response3 = await postData(apiaddress+'/today-ict-leave', {shift:document.getElementById('shift').value});
+    setLeave(response3)
+    const response4 = await postData(apiaddress+'/today-ict-lates', {shift:document.getElementById('shift').value});
+    setlates(response4)
+    const response5 = await postData(apiaddress+'/dashboard-charts', {classsections});
+    setData(response5)
+  }
+
 
 return (
 <>
@@ -100,6 +119,22 @@ return (
 
 <GridContainer justify="center" alignItems="center" spacing={1}>
 <GridItem xs={12} sm={12} md={12}>
+
+<select id="shift" onChange={rewrite}>
+  {permissions.morning?(
+  <option value='morning'>
+  Morning
+  </option>
+  ):('')}
+  {permissions.evening?(
+  <option value='evening'>
+  Evening
+  </option>
+  ):('')}
+</select>
+</GridItem>
+<GridItem xs={12} sm={12} md={12}>
+
 <ul className="myul">
 <li>
 <span className="wd1">Class Name</span>
@@ -109,78 +144,37 @@ return (
 <span className="wd1">Leave</span>
 <span className="wd3">Late</span>
 </li>
-
-            <li>
-            <span style={colorpick('even')} className="wv1">1st-Year-A</span>
-            <span style={colorpick('even')} className="wv2">{data1[0]}</span>
-            <span style={colorpick('even')} className="wv3">{data1[1]}</span>
-            <span style={colorpick('even')} className="wv1">{data1[2]}</span>
-            <span style={colorpick('even')} className="wv1">{data1[3]}</span>
-            <span style={colorpick('even')} className="wv3">{data1[4]}</span>
-            </li>
-
-            <li >
-            <span style={colorpick('odd')} className="wv1">1st-Year-B</span>
-            <span style={colorpick('odd')} className="wv2">{data2[0]}</span>
-            <span style={colorpick('odd')} className="wv3">{data2[1]}</span>
-            <span style={colorpick('odd')} className="wv1">{data2[2]}</span>
-            <span style={colorpick('odd')} className="wv1">{data2[3]}</span>
-            <span style={colorpick('odd')} className="wv3">{data2[4]}</span>
-            </li>
-
-            <li>
-            <span style={colorpick('even')} className="wv1">2nd-Year-A</span>
-            <span style={colorpick('even')} className="wv2">{data3[0]}</span>
-            <span style={colorpick('even')} className="wv3">{data3[1]}</span>
-            <span style={colorpick('even')} className="wv1">{data3[2]}</span>
-            <span style={colorpick('even')} className="wv1">{data3[3]}</span>
-            <span style={colorpick('even')} className="wv3">{data3[4]}</span>
-            </li>
-
-            <li>
-            <span style={colorpick('odd')} className="wv1">2nd-Year-B</span>
-            <span style={colorpick('odd')} className="wv2">{data4[0]}</span>
-            <span style={colorpick('odd')} className="wv3">{data4[1]}</span>
-            <span style={colorpick('odd')} className="wv1">{data4[2]}</span>
-            <span style={colorpick('odd')} className="wv1">{data4[3]}</span>
-            <span style={colorpick('odd')} className="wv3">{data4[4]}</span>
-            </li>
-
-            <li>
-            <span style={colorpick('even')} className="wv1">3rd-Year-A</span>
-            <span style={colorpick('even')} className="wv2">{data5[0]}</span>
-            <span style={colorpick('even')} className="wv3">{data5[1]}</span>
-            <span style={colorpick('even')} className="wv1">{data5[2]}</span>
-            <span style={colorpick('even')} className="wv1">{data5[3]}</span>
-            <span style={colorpick('even')} className="wv3">{data5[4]}</span>
-            </li>
-
-            <li>
-            <span style={colorpick('odd')} className="wv1">3rd-Year-B</span>
-            <span style={colorpick('odd')} className="wv2">{data6[0]}</span>
-            <span style={colorpick('odd')} className="wv3">{data6[1]}</span>
-            <span style={colorpick('odd')} className="wv1">{data6[2]}</span>
-            <span style={colorpick('odd')} className="wv1">{data6[3]}</span>
-            <span style={colorpick('odd')} className="wv3">{data6[4]}</span>
-            </li>
+{data.map((dat,cnt)=>(
+<li>
+<span style={colorpick(cnt)} className="wv1">{classsections[cnt].class+' '+classsections[cnt].section}</span>
+<span style={colorpick(cnt)} className="wv2">{dat[0]}</span>
+<span style={colorpick(cnt)} className="wv3">{dat[1]}</span>
+<span style={colorpick(cnt)} className="wv1">{dat[2]}</span>
+<span style={colorpick(cnt)} className="wv1">{dat[3]}</span>
+<span style={colorpick(cnt)} className="wv3">{dat[4]}</span>
+</li>
+))}
 
 <li>
-<span style={colorpick('total')} className="wv1">Total</span>
-<span style={colorpick('total')} className="wv2">{tstrength.strength}</span>
-<span style={colorpick('total')} className="wv3">{tpresent.present}</span>
-<span style={colorpick('total')} className="wv1">{tabsent.absent}</span>
-<span style={colorpick('total')} className="wv1">{tleave.leaves}</span>
-<span style={colorpick('total')} className="wv3">{lates.lates}</span>
+<span style={{backgroundColor:'#00acc1',color:'white',fontWeight:'bold'}} className="wv1">Total</span>
+<span style={{backgroundColor:'#00acc1',color:'white',fontWeight:'bold'}} className="wv2">{tstrength.strength}</span>
+<span style={{backgroundColor:'#00acc1',color:'white',fontWeight:'bold'}} className="wv3">{tpresent.present}</span>
+<span style={{backgroundColor:'#00acc1',color:'white',fontWeight:'bold'}} className="wv1">{tabsent.absent}</span>
+<span style={{backgroundColor:'#00acc1',color:'white',fontWeight:'bold'}} className="wv1">{tleave.leaves}</span>
+<span style={{backgroundColor:'#00acc1',color:'white',fontWeight:'bold'}} className="wv3">{lates.lates}</span>
 </li>
 </ul>
+
+
+
+
+
 </GridItem>
 </GridContainer>
-
-
 </CardBody>
 </Card>
 </div>
-<button style={colorpick('print')} onClick={handlePrint}>Print</button>
+<button style={{backgroundColor:'#00acc1',color:'white',fontWeight:'bold',margin:'0 auto',height:'50px',width:'150px',border:'none',borderRadius:'5px',cursor:'pointer'}} onClick={handlePrint}>Print</button>
 </>
 );
 };

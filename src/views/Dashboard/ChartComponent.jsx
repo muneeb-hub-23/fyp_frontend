@@ -31,13 +31,16 @@ const ChartComponent = ({ chartId, chartData }) => {
         }]
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
-          yAxes: [{
+          y: {
+            beginAtZero: true,
             ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
+              stepSize: 1,
+            },
+          },
+        },
       }
     });
   }, [chartData]);
