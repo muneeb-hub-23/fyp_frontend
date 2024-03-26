@@ -56,14 +56,12 @@ const [classes1,setClasses]=useState([])
 const [sections,setSections] = useState([])
 const [departments,setDepartments] = useState([])
 const [shifts,setShifts] = useState([])
-
+const user = localStorage.getItem('username')
 const ApiCaller2 = async (props) => {
 
   try {
-    const res1 = await postData(apiaddress+'/get-classes',{data:true})
+    const res1 = await postData(apiaddress+'/get-special-classes',{number:user})
     setClasses(res1)
-    const res2 = await postData(apiaddress+'/get-sections',{data:true})
-    setSections(res2)
     const res3 = await postData(apiaddress+'/get-departments',{data:true})
     setDepartments(res3)
     const res4 = await postData(apiaddress+'/get-shifts',{data:true})
@@ -103,8 +101,8 @@ setFormData({
   email: document.getElementById('email').value,
   cnic: document.getElementById('cnic').value,
   department: document.getElementById('department').value,
-  class1: document.getElementById('class').value,
-  section: document.getElementById('section').value,
+  class1: classes1[document.getElementById('class').value].class,
+  section: classes1[document.getElementById('class').value].section,
   shift: document.getElementById('shift').value,
   student_mobile_number: document.getElementById('studentmobilenumber').value,
   father_full_name: document.getElementById('fatherfullname').value,
@@ -120,8 +118,8 @@ const ApiCaller = async (props) => {
   try {
     const response = await postData(apiaddress+'/update-student',props);
     console.log(response);
-    const res2 = await postData(apiaddress+'/get-classes',{data:true})
-    setClasses(res2)
+    const res1 = await postData(apiaddress+'/get-special-classes',{number:user})
+    setClasses(res1)
   } catch (error) {
     console.log(error);
   }
@@ -293,24 +291,18 @@ return
                   </select>
                  
                 </GridItem>
+
                 <GridItem xs={12} sm={6} md={3}>
            
-                  <select onChange={handleInputChange} value={formData.class1} className='myinputselect' name="class" id="class">
-                  <option value="default">Select Class</option>
-                  {classes1.map((classes)=>(
-                    <option value={classes.classes}>{classes.classes}</option>
+                  <select onChange={handleInputChange} className='myinputselect' name="class" id="class">
+
+                  {classes1.map((classes,count)=>(
+                    <option value={count}>{classes.class} {classes.section}</option>
                   ))}
+
                   </select>
                 </GridItem>
-                <GridItem xs={12} sm={6} md={3}>
-          
-                <select onChange={handleInputChange} value={formData.section} className='myinputselect' name="section" id="section">
-                <option value="default">Select Section</option>
-                {sections.map((sections)=>(
-                    <option value={sections.sections}>{sections.sections}</option>
-                  ))}
-                </select>
-                </GridItem>
+  
                 <GridItem xs={12} sm={6} md={3}>
            
                   <select onChange={handleInputChange} value={formData.shift} className='myinputselect' name="shift" id="shift">

@@ -419,6 +419,24 @@ const dashboardRoutes = [
     visible:true,
     layout: "/admin"
   },
+  {
+    path: "/morning",
+    name: "morning",
+    rtlName: "morning",
+    icon: ImportContactsIcon,
+    component: Warningletters,
+    visible:false,
+    layout: "/admin"
+  },
+  {
+    path: "/evening",
+    name: "evening",
+    rtlName: "evening",
+    icon: ImportContactsIcon,
+    component: Warningletters,
+    visible:false,
+    layout: "/admin"
+  },
   
 
   

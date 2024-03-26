@@ -112,6 +112,8 @@ const Departmentfines = () => {
   const user = localStorage.getItem("username");
   const [classfines,setclassfines] = useState([{class1:'Class Name',section1:'Section',fine:'fine',style:'header'}])
   const [count, setCount] = useState(0);
+  const [permissions,Setpermissions] = useState({morning:false,evening:false})
+
   const alphamonthts = [
     {monthname:'January',value:1},
     {monthname:'February',value:2},
@@ -154,6 +156,7 @@ const Departmentfines = () => {
         break;
     }
     }
+
   const [selectedValue, setSelectedValue] = useState({
     sdate: getFirstDateOfMonth('January','2024'),
     ldate: getLastDateOfMonth('January','2024'),
@@ -168,6 +171,16 @@ const Departmentfines = () => {
       const res2 = await postData(apiaddress + "/get-special-sections", {
         number: user,
       });
+      // const res4 = await postData(apiaddress + "/get-permissions",{usern:localStorage.getItem('username')})
+      // const a = countStringOccurrences(res4,'morning')
+      // const b = countStringOccurrences(res4, 'evening')
+      // if(a === 1){
+
+      //   Setpermissions(prevpermissions => ({ ...prevpermissions, morning:true }))
+      // }
+      // if(b === 1){
+      //  Setpermissions(prevpermissions => ({ ...prevpermissions,evening:true}))
+      // }
       setSections(res2);
       const res3 = await postData(apiaddress + "/get-sessions", {
         number: user,
@@ -189,7 +202,6 @@ const Departmentfines = () => {
         ]);
 
       }
-
 
       setclassfines(prevClassfines => [
         ...prevClassfines,
@@ -295,6 +307,18 @@ if (b != 'All Months'){
 <p style={{color:'white',fontWeight:'bold'}}>ICT Department</p>
 
           </GridItem>
+          {/* <GridItem xs={12} sm={6} md={2}>
+
+<select className='viewdepname' id="shift">
+  {permissions.morning?(
+<option value="morning">Morning</option>
+):('')}
+  {permissions.evening?(
+<option value="evening">Evening</option>
+):('')}
+</select>
+
+          </GridItem> */}
         <GridItem xs={12} sm={6} md={2}>
           <select className='viewdepname' id="session" onChange={handleDropdownChange}>
                               {session.map((session)=>(

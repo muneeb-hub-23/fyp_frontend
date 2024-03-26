@@ -97,6 +97,14 @@ function convertDateFormat(dateString) {
 }
 
 function DepartmentWiseReport() {
+const getvalue = getTodayDate()
+const [dates,setDates] = useState({sdate:getvalue,ldate:getvalue})
+const [selectedValue,setSelectedValue] = useState({crietaria:'daily',duration:'thisweek'})
+const [att,setAtt] = useState({str:0,p:0,a:0,l:0,lt:0})
+const [tableContent,settablecontent] = useState();
+const [permissions,Setpermissions] = useState({morning:false,evening:false})
+
+
 const toggleoption = async () => {
   var a = document.getElementById('viewchart').style.display
   var b = document.getElementById('documentreport').style.display
@@ -123,12 +131,6 @@ const handlePrint = async () => {
   document.getElementById('printdata').style.position = 'relative';
   
 };
-const getvalue = getTodayDate()
-const [dates,setDates] = useState({sdate:getvalue,ldate:getvalue})
-const [selectedValue,setSelectedValue] = useState({crietaria:'daily',duration:'thisweek'})
-const [att,setAtt] = useState({str:0,p:0,a:0,l:0,lt:0})
-const [tableContent,settablecontent] = useState();
-
 const CallApi = async () => {
 var datesd = []
 var labeld = []
@@ -140,7 +142,7 @@ var lated = []
 if(selectedValue.duration === 'custom'){datesd = getDatesInRange(dates.sdate,dates.ldate)}
 else{datesd =getDatesByPeriod(selectedValue.duration)}
 setDates({sdate:convertDateFormat(datesd[0]),ldate:convertDateFormat(datesd[datesd.length-1])})
-const re = await postData(apiaddress+'/department-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd})
+const re = await postData(apiaddress+'/department-report',{crietaria:selectedValue.crietaria,duration:selectedValue.duration,dates:datesd,shift:document.getElementById('shift').value})
 setAtt({str:re.tstr,p:re.tp,a:re.ta,l:re.tl,lt:re.tlt})
 labeld = re.labels
 presentd=re.presentd
@@ -402,7 +404,6 @@ if(selectedValue.crietaria === 'daily'){
 
 
 } 
-
 const handlecrietaria = async (e) => {
   setSelectedValue({...selectedValue,crietaria:e.target.value})
 
@@ -423,7 +424,34 @@ const handleduration = async (e) => {
     document.getElementById('ldate').disabled = true
   }
 }
+function countStringOccurrences(arr, targetString) {
+  let count = 0;
 
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === targetString) {
+      count++;
+    }
+  }
+
+  return count;
+}
+const shiftsetup = async () => {
+
+      const res4 = await postData(apiaddress + "/get-permissions",{usern:localStorage.getItem('username')})
+      const a = countStringOccurrences(res4,'morning')
+      const b = countStringOccurrences(res4, 'evening')
+      if(a === 1){
+
+      Setpermissions(prevpermissions => ({ ...prevpermissions, morning:true }))
+      }
+      if(b === 1){
+      Setpermissions(prevpermissions => ({ ...prevpermissions,evening:true}))
+      }
+
+}
+useEffect(()=>{
+  shiftsetup()
+},[])
 
 
   return (
@@ -437,7 +465,20 @@ const handleduration = async (e) => {
 <p className='viewdepname'>ICT DEPARTMENT</p>
 </GridItem>
 
-<GridItem xs={12} sm={4} md={2}>
+<GridItem xs={12} sm={6} md={1}>
+
+<select className='viewdepname' id="shift">
+{permissions.morning?(
+<option value="morning">Morning</option>
+):('')}
+{permissions.evening?(
+<option value="evening">Evening</option>
+):('')}
+</select>
+
+</GridItem>
+
+<GridItem xs={12} sm={4} md={1}>
 <select id='crietaria' className='viewdepname' value={selectedValue.crietaria} onChange={handlecrietaria}>
   <option value="daily">Daily</option>
   <option value="weekly">Weekly</option>

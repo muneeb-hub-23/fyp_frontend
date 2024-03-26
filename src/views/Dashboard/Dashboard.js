@@ -1,5 +1,4 @@
-import React from "react";
-import ChartistGraph from "react-chartist";
+import React, { useState } from "react";
 import Chart from "chart.js";
 import { makeStyles } from "@material-ui/core/styles";
 import GridItem from "components/Grid/GridItem.js";
@@ -13,8 +12,19 @@ import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js"
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { apiaddress } from "auth/apiaddress";
 import { postData } from "auth/datapost";
+import ChartComponent from "./ChartComponent";
 const useStyles = makeStyles(styles);
+function countStringOccurrences(arr, targetString) {
+  let count = 0;
 
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === targetString) {
+      count++;
+    }
+  }
+
+  return count;
+}
 
 
 export default function Dashboard() {
@@ -25,26 +35,265 @@ export default function Dashboard() {
   const [tleave,setLeave] = React.useState({leaves:0})
   const[lates,setlates] = React.useState({lates:0})
   const[data,setData] = React.useState([[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]])
+  const [permissions,Setpermissions] = React.useState({morning:false,evening:false})
+  const [classsections,setclasssections] = useState([])
+
   const ApiCaller = async ()=>{
     try{
-      const response0 = await postData(apiaddress+'/today-ict-strength', {hello:'true'});
-      setTStrength(response0)
-      
 
-      const response1 = await postData(apiaddress+'/today-ict-present', {hello:'true'});
+      const resx = await postData(apiaddress + "/get-permissions",{usern:localStorage.getItem('username')})
+      const a = countStringOccurrences(resx,'morning')
+      const b = countStringOccurrences(resx, 'evening')
+      if(a === 1){
+
+      Setpermissions(prevpermissions => ({ ...prevpermissions, morning:true }))
+      }
+      if(b === 1){
+      Setpermissions(prevpermissions => ({ ...prevpermissions,evening:true}))
+      }
+      const restx = await postData(apiaddress+'/get-special-classes',{number:localStorage.getItem('username')})
+      setclasssections(restx)
+      const response0 = await postData(apiaddress+'/today-ict-strength', {shift:document.getElementById('shift').value});
+      setTStrength(response0)
+
+      const response1 = await postData(apiaddress+'/today-ict-present', {shift:document.getElementById('shift').value});
       setPresent(response1)
 
-      const response2 = await postData(apiaddress+'/today-ict-absent', {hello:'true'});
+      const response2 = await postData(apiaddress+'/today-ict-absent', {shift:document.getElementById('shift').value});
       setAbsent(response2)
 
-      const response3 = await postData(apiaddress+'/today-ict-leave', {hello:'true'});
+      const response3 = await postData(apiaddress+'/today-ict-leave', {shift:document.getElementById('shift').value});
       setLeave(response3)
 
-      const response4 = await postData(apiaddress+'/today-ict-lates', {hello:'true'});
+      const response4 = await postData(apiaddress+'/today-ict-lates', {shift:document.getElementById('shift').value});
       setlates(response4)
-
-      const response5 = await postData(apiaddress+'/dashboard-charts', {hello:'true'});
+   
+      const response5 = await postData(apiaddress+'/dashboard-charts', {classsections:restx});
       setData(response5)
+  
+
+
+      
+    //   for(var tlto=0; tlto<restx.length; tlto++){
+
+
+    //   console.log(ctx1)
+    //   // const ctx2 = document.getElementById('myChart2').getContext('2d');
+    //   // const ctx3 = document.getElementById('myChart3').getContext('2d');
+    //   //const ctx4 = document.getElementById('myChart4').getContext('2d');
+    //   // const ctx5 = document.getElementById('myChart5').getContext('2d');
+    //   // const ctx6 = document.getElementById('myChart6').getContext('2d');
+    //   const ctx1 = document.getElementById('myChart'+(tlto+1)).getContext('2d');
+    //   new Chart(ctx1, {
+    //     type: 'bar',
+    //     data: {
+    //         labels: ["Strength","Present","Absent","Leave","Late"],
+    //         datasets: [{
+    //             label: restx[tlto].class+' '+restx[tlto].section,
+    //             data: data[tlto],
+    //             backgroundColor: [
+    //                 '#ec407a',
+    //                 '#00a40e',
+    //                 'red',
+    //                 '#00acc1',
+    //                 'orange'
+    //             ],
+    //             borderColor: [
+    //               '#ec407a',
+    //               '#00a40e',
+    //               'red',
+    //               '#00acc1',
+    //               'orange'
+    //             ],
+    //             borderWidth: 1
+    //         }]
+    //     },
+    //     options: {
+    //         scales: {
+    //             yAxes: [{
+    //                 ticks: {
+    //                     beginAtZero: true
+    //                 }
+    //             }]
+    //         }
+    //     }
+    //   });
+    //   // var myChart2 = new Chart(ctx2, {
+    //   //   type: 'bar',
+    //   //   data: {
+    //   //       labels: ["Strength","Present","Absent","Leave","Late"],
+    //   //       datasets: [{
+    //   //           label: '2nd-Year-A',
+    //   //           data: data[1],
+    //   //           backgroundColor: [
+    //   //               '#ec407a',
+    //   //               '#00a40e',
+    //   //               'red',
+    //   //               '#00acc1',
+    //   //               'orange'
+    //   //           ],
+    //   //           borderColor: [
+    //   //             '#ec407a',
+    //   //             '#00a40e',
+    //   //             'red',
+    //   //             '#00acc1',
+    //   //             'orange'
+    //   //           ],
+    //   //           borderWidth: 1
+    //   //       }]
+    //   //   },
+    //   //   options: {
+    //   //       scales: {
+    //   //           yAxes: [{
+    //   //               ticks: {
+    //   //                   beginAtZero: true
+    //   //               }
+    //   //           }]
+    //   //       }
+    //   //   }
+    //   // });
+    //   // var myChart3 = new Chart(ctx3, {
+    //   //   type: 'bar',
+    //   //   data: {
+    //   //       labels: ["Strength","Present","Absent","Leave","Late"],
+    //   //       datasets: [{
+    //   //           label: '3rd-Year-A',
+    //   //           data: data[2],
+    //   //           backgroundColor: [
+    //   //               '#ec407a',
+    //   //               '#00a40e',
+    //   //               'red',
+    //   //               '#00acc1',
+    //   //               'orange'
+    //   //           ],
+    //   //           borderColor: [
+    //   //             '#ec407a',
+    //   //             '#00a40e',
+    //   //             'red',
+    //   //             '#00acc1',
+    //   //             'orange'
+    //   //           ],
+    //   //           borderWidth: 1
+    //   //       }]
+    //   //   },
+    //   //   options: {
+    //   //       scales: {
+    //   //           yAxes: [{
+    //   //               ticks: {
+    //   //                   beginAtZero: true
+    //   //               }
+    //   //           }]
+    //   //       }
+    //   //   }
+    //   // });
+    //   // var myChart4 = new Chart(ctx4, {
+    //   //   type: 'bar',
+    //   //   data: {
+    //   //       labels: ["Strength","Present","Absent","Leave","Late"],
+    //   //       datasets: [{
+    //   //           label: '1st-Year-B',
+    //   //           data: data[3],
+    //   //           backgroundColor: [
+    //   //               '#ec407a',
+    //   //               '#00a40e',
+    //   //               'red',
+    //   //               '#00acc1',
+    //   //               'orange'
+    //   //           ],
+    //   //           borderColor: [
+    //   //             '#ec407a',
+    //   //             '#00a40e',
+    //   //             'red',
+    //   //             '#00acc1',
+    //   //             'orange'
+    //   //           ],
+    //   //           borderWidth: 1
+    //   //       }]
+    //   //   },
+    //   //   options: {
+    //   //       scales: {
+    //   //           yAxes: [{
+    //   //               ticks: {
+    //   //                   beginAtZero: true
+    //   //               }
+    //   //           }]
+    //   //       }
+    //   //   }
+    //   // });
+      
+    //   // var myChart5 = new Chart(ctx5, {
+    //   //   type: 'bar',
+    //   //   data: {
+    //   //       labels: ["Strength","Present","Absent","Leave","Late"],
+    //   //       datasets: [{
+    //   //           label: '2nd-Year-B',
+    //   //           data: data[4],
+    //   //           backgroundColor: [
+    //   //               '#ec407a',
+    //   //               '#00a40e',
+    //   //               'red',
+    //   //               '#00acc1',
+    //   //               'orange'
+    //   //           ],
+    //   //           borderColor: [
+    //   //             '#ec407a',
+    //   //             '#00a40e',
+    //   //             'red',
+    //   //             '#00acc1',
+    //   //             'orange'
+    //   //           ],
+    //   //           borderWidth: 1
+    //   //       }]
+    //   //   },
+    //   //   options: {
+    //   //       scales: {
+    //   //           yAxes: [{
+    //   //               ticks: {
+    //   //                   beginAtZero: true
+    //   //               }
+    //   //           }]
+    //   //       }
+    //   //   }
+    //   // });
+    //   // var myChart6 = new Chart(ctx6, {
+    //   //   type: 'bar',
+    //   //   data: {
+    //   //       labels: ["Strength","Present","Absent","Leave","Late"],
+    //   //       datasets: [{
+    //   //           label: '3rd-Year-B',
+    //   //           data: data[5],
+    //   //           backgroundColor: [
+    //   //               '#ec407a',
+    //   //               '#00a40e',
+    //   //               'red',
+    //   //               '#00acc1',
+    //   //               'orange'
+    //   //           ],
+    //   //           borderColor: [
+    //   //             '#ec407a',
+    //   //             '#00a40e',
+    //   //             'red',
+    //   //             '#00acc1',
+    //   //             'orange'
+    //   //           ],
+    //   //           borderWidth: 1
+    //   //       }]
+    //   //   },
+    //   //   options: {
+    //   //       scales: {
+    //   //           yAxes: [{
+    //   //               ticks: {
+    //   //                   beginAtZero: true
+    //   //               }
+    //   //           }]
+    //   //       }
+    //   //   }
+    //   // });
+
+
+
+
+    // }
 
 
       return
@@ -59,269 +308,32 @@ export default function Dashboard() {
     ApiCaller();
   }, []);
 
-const emailsSubscriptionChart = {
-
+  const rewrite = async () =>{
+    const response0 = await postData(apiaddress+'/today-ict-strength', {shift:document.getElementById('shift').value});
+    setTStrength(response0)
   
-  options: {
-    axisX: {
-      showGrid: false
-    },
-    low: 0,
-    chartPadding: {
-      top: 0,
-      right: 5,
-      bottom: 0,
-      left: 0
-    }
-  },
-  responsiveOptions: [
-    [
-      "screen and (max-width: 640px)",
-      {
-        seriesBarDistance: 5,
-        axisX: {
-          labelInterpolationFnc: function(value) {
-            return value[0];
-          }
-        }
-      }
-    ]
-  ],
-  animation: {
-    draw: function(data) {
-      if (data.type === "bar") {
-        data.element.animate({
-          opacity: {
-            begin: (data.index + 1) * 80,
-            dur: 500,
-            from: 0,
-            to: 1,
-            easing: "ease"
-          }
-        });
-      }
-    }
+    const response1 = await postData(apiaddress+'/today-ict-present', {shift:document.getElementById('shift').value});
+    setPresent(response1)
+  
+    const response2 = await postData(apiaddress+'/today-ict-absent', {shift:document.getElementById('shift').value});
+    setAbsent(response2)
+  
+    const response3 = await postData(apiaddress+'/today-ict-leave', {shift:document.getElementById('shift').value});
+    setLeave(response3)
+  
+    const response4 = await postData(apiaddress+'/today-ict-lates', {shift:document.getElementById('shift').value});
+    setlates(response4)
+  
+    const response5 = await postData(apiaddress+'/dashboard-charts', {hello:'true'});
+    setData(response5)
   }
 
-};
-setTimeout(() => {
-const ctx1 = document.getElementById('myChart1').getContext('2d');
-const ctx2 = document.getElementById('myChart2').getContext('2d');
-const ctx3 = document.getElementById('myChart3').getContext('2d');
-const ctx4 = document.getElementById('myChart4').getContext('2d');
-const ctx5 = document.getElementById('myChart5').getContext('2d');
-const ctx6 = document.getElementById('myChart6').getContext('2d');
-
-var myChart1 = new Chart(ctx1, {
-  type: 'bar',
-  data: {
-      labels: ["Strength","Present","Absent","Leave","Late"],
-      datasets: [{
-          label: '1st-Year-A',
-          data: data[0],
-          backgroundColor: [
-              '#ec407a',
-              '#00a40e',
-              'red',
-              '#00acc1',
-              'orange'
-          ],
-          borderColor: [
-            '#ec407a',
-            '#00a40e',
-            'red',
-            '#00acc1',
-            'orange'
-          ],
-          borderWidth: 1
-      }]
-  },
-  options: {
-      scales: {
-          yAxes: [{
-              ticks: {
-                  beginAtZero: true
-              }
-          }]
-      }
-  }
-});
-var myChart2 = new Chart(ctx2, {
-  type: 'bar',
-  data: {
-      labels: ["Strength","Present","Absent","Leave","Late"],
-      datasets: [{
-          label: '2nd-Year-A',
-          data: data[1],
-          backgroundColor: [
-              '#ec407a',
-              '#00a40e',
-              'red',
-              '#00acc1',
-              'orange'
-          ],
-          borderColor: [
-            '#ec407a',
-            '#00a40e',
-            'red',
-            '#00acc1',
-            'orange'
-          ],
-          borderWidth: 1
-      }]
-  },
-  options: {
-      scales: {
-          yAxes: [{
-              ticks: {
-                  beginAtZero: true
-              }
-          }]
-      }
-  }
-});
-var myChart3 = new Chart(ctx3, {
-  type: 'bar',
-  data: {
-      labels: ["Strength","Present","Absent","Leave","Late"],
-      datasets: [{
-          label: '3rd-Year-A',
-          data: data[2],
-          backgroundColor: [
-              '#ec407a',
-              '#00a40e',
-              'red',
-              '#00acc1',
-              'orange'
-          ],
-          borderColor: [
-            '#ec407a',
-            '#00a40e',
-            'red',
-            '#00acc1',
-            'orange'
-          ],
-          borderWidth: 1
-      }]
-  },
-  options: {
-      scales: {
-          yAxes: [{
-              ticks: {
-                  beginAtZero: true
-              }
-          }]
-      }
-  }
-});
-var myChart4 = new Chart(ctx4, {
-  type: 'bar',
-  data: {
-      labels: ["Strength","Present","Absent","Leave","Late"],
-      datasets: [{
-          label: '1st-Year-B',
-          data: data[3],
-          backgroundColor: [
-              '#ec407a',
-              '#00a40e',
-              'red',
-              '#00acc1',
-              'orange'
-          ],
-          borderColor: [
-            '#ec407a',
-            '#00a40e',
-            'red',
-            '#00acc1',
-            'orange'
-          ],
-          borderWidth: 1
-      }]
-  },
-  options: {
-      scales: {
-          yAxes: [{
-              ticks: {
-                  beginAtZero: true
-              }
-          }]
-      }
-  }
-});
-var myChart5 = new Chart(ctx5, {
-  type: 'bar',
-  data: {
-      labels: ["Strength","Present","Absent","Leave","Late"],
-      datasets: [{
-          label: '2nd-Year-B',
-          data: data[4],
-          backgroundColor: [
-              '#ec407a',
-              '#00a40e',
-              'red',
-              '#00acc1',
-              'orange'
-          ],
-          borderColor: [
-            '#ec407a',
-            '#00a40e',
-            'red',
-            '#00acc1',
-            'orange'
-          ],
-          borderWidth: 1
-      }]
-  },
-  options: {
-      scales: {
-          yAxes: [{
-              ticks: {
-                  beginAtZero: true
-              }
-          }]
-      }
-  }
-});
-var myChart6 = new Chart(ctx6, {
-  type: 'bar',
-  data: {
-      labels: ["Strength","Present","Absent","Leave","Late"],
-      datasets: [{
-          label: '3rd-Year-B',
-          data: data[5],
-          backgroundColor: [
-              '#ec407a',
-              '#00a40e',
-              'red',
-              '#00acc1',
-              'orange'
-          ],
-          borderColor: [
-            '#ec407a',
-            '#00a40e',
-            'red',
-            '#00acc1',
-            'orange'
-          ],
-          borderWidth: 1
-      }]
-  },
-  options: {
-      scales: {
-          yAxes: [{
-              ticks: {
-                  beginAtZero: true
-              }
-          }]
-      }
-  }
-});
-
-}, 100);
-
-
+const trials = (
+  <ChartComponent chartId="myChart" chartData={data[0]} />
+)
   return (
     <div>
+   
       <GridContainer justify="center" alignItems="center" spacing={2}>
         <GridItem xs={12} sm={12} md={2}>
           <Card>
@@ -418,7 +430,24 @@ var myChart6 = new Chart(ctx6, {
         </Link>
         </GridItem>
 
+        <GridItem xs={12} sm={12} md={12}>
+
+        <select id="shift" onChange={rewrite}>
+          {permissions.morning?(
+          <option value='morning'>
+          Morning
+          </option>
+          ):('')}
+          {permissions.evening?(
+          <option value='evening'>
+          Evening
+          </option>
+          ):('')}
+        </select>
+        </GridItem>
+
       </GridContainer>
+
 
       <GridContainer>
 
@@ -427,7 +456,8 @@ var myChart6 = new Chart(ctx6, {
         <Link to={'/admin/todaydetail/1st-year/a'}>
           <Card chart>
             <CardHeader>
-            <canvas id="myChart1"/>
+            {/* <canvas id="myChart1"/> */}
+           {trials}
               {/* <h4 className={classes.cardTitle}>First Year A</h4> */}
 
             </CardHeader>
