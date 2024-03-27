@@ -35,7 +35,7 @@ const [tabsent,setAbsent] = React.useState({absent:0})
 const [tleave,setLeave] = React.useState({leaves:0})
 const[lates,setlates] = React.useState({lates:0})
 const[data,setData] = React.useState([[0,4,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]])
-const [permissions,Setpermissions] = React.useState({morning:false,evening:false})
+const [permissions,Setpermissions] = React.useState({morning:false,evening:false,a:false})
 const [classsections,setclasssections] = useState([])
 
   const ApiCaller = async ()=>{
@@ -44,6 +44,7 @@ const [classsections,setclasssections] = useState([])
       const resx = await postData(apiaddress + "/get-permissions",{usern:localStorage.getItem('username')})
       const a = countStringOccurrences(resx,'morning')
       const b = countStringOccurrences(resx, 'evening')
+      const c = countStringOccurrences(resx, 'departmentondashboard')
       if(a === 1){
 
       Setpermissions(prevpermissions => ({ ...prevpermissions, morning:true }))
@@ -51,6 +52,9 @@ const [classsections,setclasssections] = useState([])
       if(b === 1){
       Setpermissions(prevpermissions => ({ ...prevpermissions,evening:true}))
       }
+      if(c === 1){
+        Setpermissions(prevpermissions => ({ ...prevpermissions,a:true}))
+        }
       if((a+b)<2){
         document.getElementById('shift').style.visibility = 'hidden'
       }
@@ -106,7 +110,7 @@ const [classsections,setclasssections] = useState([])
 
   return (
 <div>
-   
+{permissions.a?(
 <GridContainer justify="center" alignItems="center" spacing={2}>
 
   <GridItem xs={12} sm={12} md={2}>
@@ -204,7 +208,10 @@ const [classsections,setclasssections] = useState([])
   </Link>
   </GridItem>
 
-  <GridItem xs={12} sm={12} md={12}>
+
+
+</GridContainer>
+):('')}
 
 <select id="shift" onChange={rewrite}>
   {permissions.morning?(
@@ -218,9 +225,7 @@ const [classsections,setclasssections] = useState([])
   </option>
   ):('')}
 </select>
-</GridItem>
 
-</GridContainer>
 
 <GridContainer>
 {classsections.map((cla,cnt)=>(

@@ -77,25 +77,7 @@ const ApiCaller = async (props) => {
   }
 
 };
-const handleSubmit = (e) => {
 
-  e.preventDefault();
-ApiCaller(formData);
-  setFormData({
-    Employee_number:'',
-    Employee_full_name:'',
-    Employee_mobile_number:'',
-    father_full_name:'',
-    father_mobile_number:'',
-    joining_date:'2024-09-01',
-    email:'',
-    cnic:'',
-    password:''
-  });
-
-
-
-};
 
   const classes = useStyles();
 

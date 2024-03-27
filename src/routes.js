@@ -394,6 +394,15 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
+    path: "/departmentondashboard",
+    name: "Department Status View",
+    rtlName: "departmentondashboard",
+    icon: SupervisedUserCircleIcon,
+    component: Dashboard,
+    visible:false,
+    layout: "/admin"
+  },
+  {
     path: "/assignblockeddate",
     name: "Blocked Dates",
     rtlName: "blockeddates",

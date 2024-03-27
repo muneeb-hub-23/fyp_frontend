@@ -16,12 +16,10 @@ import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/logo.png";
 import { AuthData } from "auth/AuthWrapper";
 import { apiaddress } from "auth/apiaddress";
+import video from '../assets/img/logo.mp4'
+
 let ps;
-
-
-
 const useStyles = makeStyles(styles);
-
 export default function Admin({ ...rest }) {
   async function postData(url, data) {
     try {
@@ -137,9 +135,19 @@ export default function Admin({ ...rest }) {
       window.removeEventListener("resize", resizeFunction);
     };
   }, [mainPanel]);
+setTimeout(() => {
+  document.getElementById('rawic').style.display='none'
+  document.getElementById('maintopdiv').style.visibility='visible'
+}, 3000);
 
   return (
-    <div id="maintopdiv" className={classes.wrapper}>
+    <>
+    <video id="rawic" className="rawic" autoPlay muted>
+        <source src={video} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+    <div style={{visibility:'hidden'}} id="maintopdiv" className={classes.wrapper}>
       <Sidebar
         routes={routes2}
         logoText={"SAMS"}
@@ -175,5 +183,6 @@ export default function Admin({ ...rest }) {
         />
       </div>
     </div>
+    </>
   );
 }

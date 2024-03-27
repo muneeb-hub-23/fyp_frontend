@@ -33,7 +33,7 @@ const promote = async ()=>{
 const orign = classes[document.getElementById('orign').value]
 const destination = classes[document.getElementById('destination').value]
 const res = await postData(apiaddress+'/promote-students',{orign,destination})
-if(res.err===false){
+if(res.error===false){
     Swal.fire({
         title: 'Students Promoted',
         text: 'Do you want to continue',

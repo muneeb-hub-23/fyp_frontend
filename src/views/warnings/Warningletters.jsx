@@ -12,6 +12,7 @@ import Switch from '@material-ui/core/Switch';
 import CardFooter from 'components/Card/CardFooter';
 import { apiaddress } from 'auth/apiaddress';
 import { postData } from 'auth/datapost';
+import Swal from 'sweetalert2';
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -57,8 +58,6 @@ function Warningletters() {
 
   const ApiCaller3 = async (classn,section,sessiont) => {
 
-  const response = await postData(apiaddress+'/warning-letters',{classn,section,sessiont})
-  console.log(response)
   const res5 = await postData(apiaddress+'/get-warning-letters',{classn,section,session:sessiont})
   setwarningletters(res5)
 
@@ -100,13 +99,29 @@ function Warningletters() {
 
   };
 
-    function printDiv(name1,roll_no,warningtype) {
-
-      document.getElementById('tohide').style.display='none'
-      document.getElementById('toprint').style.display='block'
-      window.print()
-      document.getElementById('tohide').style.display='block'
-      document.getElementById('toprint').style.display='none'
+   async function printDiv(name1,roll_no,warningtype) {
+    console.log(name1,roll_no,warningtype)
+    const result = await postData(apiaddress+'/warning-dispatched',{name1,roll_no,warningtype})
+    if(result.error===true){
+      Swal.fire({
+        title: 'Error!',
+        text: 'an error occurued',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      })
+    }else{
+      Swal.fire({
+        title: 'WARNING LETTER DISPATCHED',
+        text: 'RECORD ADDED',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      })
+      const txa = document.getElementById("classn").value
+      const tclass = classes[txa].class
+      const tsection = classes[txa].section
+      const tsession = document.getElementById("session").value
+      ApiCaller3(tclass,tsection,tsession)
+    }   
     
     }
 
@@ -235,9 +250,7 @@ function Warningletters() {
 </GridItem>
 </GridContainer>
 </div>
-<div id="toprint">
-dsfsf
-</div>
+
 </>
   )
 }

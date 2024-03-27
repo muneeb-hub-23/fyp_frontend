@@ -143,8 +143,6 @@ const pickcol = (count) => {
 }
 const CallApi = async () => {
 
-
-
 var labeld = []
 var presentd = []
 var absentd = []
@@ -535,19 +533,19 @@ pushup.map((push)=>(
 <p>TOTAL</p>
 </td>
 <td className='strngth'> 
-<p>{labeld.length}</p>
+<p>{ftotalp.monday+ftotala.monday+ftotall.monday+ftotallt.monday}</p>
 </td>
 <td className='strngth'> 
-<p>{labeld.length}</p>
+<p>{ftotalp.tuesday+ftotala.tuesday+ftotall.tuesday+ftotallt.tuesday}</p>
 </td>
 <td className='strngth'> 
-<p>{labeld.length}</p>
+<p>{ftotalp.wednesday+ftotala.wednesday+ftotall.wednesday+ftotallt.wednesday}</p>
 </td>
 <td className='strngth'>
-<p>{labeld.length}</p>
+<p>{ftotalp.thursday+ftotala.thursday+ftotall.thursday+ftotallt.thursday}</p>
 </td>
 <td className='strngth'> 
-<p>{labeld.length}</p>
+<p>{ftotalp.friday+ftotala.friday+ftotall.friday+ftotallt.friday}</p>
 </td>
 <td className='strngth'> 
 <p></p>
@@ -932,9 +930,7 @@ setselect({roll_no:res3[0].admission_number,name:res3[0].student_full_name})
 setrunningstu(res3[0])
 
 }
-// const handlesectionchange = async (e) => {
-// setstdval({...stdval,section:e.target.value})
-// }
+
 const handlestuchange = async (e) => {
   var namee = ''
   for(var i=0; i<students.length; i++){
@@ -1157,12 +1153,12 @@ const handlecrietaria = async (e) => {
 
 <GridItem xs={12} sm={12} md={12}> 
 <div id="printdata">
-<div style={{display:'none'}} id="viewchart">
+<div id="viewchart">
 <div className="piecapsule">
 <canvas className='piechart' id="myChart" />
 </div>
 </div>
-<div style={{display:'block'}} id="documentreport">
+<div style={{display:'none'}} id="documentreport">
   <table>
     <tbody className='hellotablee'>
       <tr>

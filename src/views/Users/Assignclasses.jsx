@@ -15,6 +15,7 @@ import CardFooter from "components/Card/CardFooter.js";
 import CancelIcon from '@material-ui/icons/Cancel';
 import { apiaddress } from 'auth/apiaddress';
 import { postData } from 'auth/datapost';
+import Swal from 'sweetalert2';
 const styles = {
     cardCategoryWhite: {
       color: "rgba(255,255,255,.62)",
@@ -113,11 +114,32 @@ const ApiCaller = async (props) => {
 
 };
 const handleShow = async () => {
-    postData(apiaddress+'/assign-classes',{selectedValue})
+    const acer = await postData(apiaddress+'/assign-classes',{selectedValue})
+    if(acer.error===true){
+      Swal.fire({
+        title: 'RECORD ALREADY EXIST!',
+        text: 'Do you want to continue',
+        icon: 'warning',
+        confirmButtonText: 'OK'
+      })
+    }else{
+      Swal.fire({
+        title: 'RECORD ADDED SUCCESSFULLY!',
+        text: 'Do you want to continue',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      })
     ApiCaller()
+    }
 }
 const handleDelete = async (data) => {
     postData(apiaddress+'/delete-class-permission',{data})
+    Swal.fire({
+      title: 'RECORD DELETED!',
+      text: 'Do you want to continue',
+      icon: 'warning',
+      confirmButtonText: 'OK'
+    })
     ApiCaller()
 }
 useEffect(()=>{

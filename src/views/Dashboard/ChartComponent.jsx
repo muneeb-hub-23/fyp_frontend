@@ -36,9 +36,7 @@ const ChartComponent = ({ chartId, chartData }) => {
         scales: {
           y: {
             beginAtZero: true,
-            ticks: {
-              stepSize: 1,
-            },
+
           },
         },
       }

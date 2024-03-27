@@ -15,6 +15,7 @@ import CardFooter from "components/Card/CardFooter.js";
 import CancelIcon from '@material-ui/icons/Cancel';
 import { apiaddress } from 'auth/apiaddress';
 import { postData } from 'auth/datapost';
+import Swal from 'sweetalert2';
 const styles = {
     cardCategoryWhite: {
       color: "rgba(255,255,255,.62)",
@@ -63,13 +64,35 @@ const ApiCaller = async (props) => {
 };
 const handleAdd = async () => {
 
-    await postData(apiaddress+'/add-blocked-date',{date,comment})
-    ApiCaller()
-    setdate('')
-    setcomment('')
+    const res = await postData(apiaddress+'/add-blocked-date',{date,comment})
+    if (res.error ===true){
+      Swal.fire({
+        title: 'RECORD ALREADY EXIST!',
+        text: 'Do you want to continue',
+        icon: 'warning',
+        confirmButtonText: 'OK'
+      })
+    }else{
+      Swal.fire({
+        title: 'RECORD ADDED SUCCESSFULLY!',
+        text: 'Do you want to continue',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      })
+      ApiCaller()
+      setdate('')
+      setcomment('')
+    }
+
 }
 const handleDelete = async (date) => {
     await postData(apiaddress+'/delete-blocked-date',{date})
+    Swal.fire({
+      title: 'RECORD SUCCESSFULLY DELETED!',
+      text: 'Do you want to continue',
+      icon: 'warning',
+      confirmButtonText: 'OK'
+    })
     ApiCaller()
 }
 
@@ -82,7 +105,7 @@ useEffect(()=>{
 <GridItem xs={12} sm={12} md={12}>
 <Card>
 <CardHeader color="primary">
-    <h4 className={classes.cardTitleWhite}>Assign Classes</h4>
+    <h4 className={classes.cardTitleWhite}>Set Blocked Dates</h4>
 </CardHeader>
 <CardBody>
 <GridContainer justify="center" alignItems="center" spacing={1}>

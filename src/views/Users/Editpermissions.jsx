@@ -12,6 +12,7 @@ import Switch from '@material-ui/core/Switch';
 import CardFooter from 'components/Card/CardFooter';
 import { apiaddress } from 'auth/apiaddress';
 import { postData } from 'auth/datapost';
+import Swal from 'sweetalert2';
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -101,9 +102,26 @@ for(var i = 0; i<xab; i++){
     }
 }
 const employee = {employee_number,employee_full_name,employee_mobile_number,father_full_name,father_mobile_number,joining_date,email,cnic,password}
-await postData(apiaddress+'/modify-user',{employee,upstate})
-window.location.href = '/';
+const response = await postData(apiaddress+'/modify-user',{employee,upstate})
+if (response.error === true){
+  Swal.fire({
+    title: 'An Error Occured!',
+    text: 'Do you want to continue',
+    icon: 'warning',
+    confirmButtonText: 'OK'
+  })
+}else{
+Swal.fire({
+  title: 'User Modified!',
+  text: 'Do you want to continue',
+  icon: 'success',
+  confirmButtonText: 'OK'
+})
+setTimeout(() => {
+  window.location.href = '/admin/modifyuser';
+}, 3000);
 
+}
 }
 
 

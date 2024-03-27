@@ -15,6 +15,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { apiaddress } from 'auth/apiaddress';
 import { postData } from 'auth/datapost';
+import Swal from 'sweetalert2';
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
@@ -69,6 +70,12 @@ const handleDropdownChange = (event) => {
 const handleDeleteUsers = async (value) => {
 
   await postData(apiaddress+'/delete-user',{username:value});
+  Swal.fire({
+    title: 'USER DELETED!',
+    text: 'Do you want to continue',
+    icon: 'warning',
+    confirmButtonText: 'OK'
+  })
   await ApiCaller()
   };
 

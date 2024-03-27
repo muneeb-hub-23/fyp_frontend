@@ -74,7 +74,7 @@ const handleDropdownChange = async (event) => {
    setData(response);
   };
 
-const handleDeleteStudents = (value) => {
+const handleDeleteStudents = async (value) => {
 
   postData(apiaddress+'/delete-student',{value});
   Swal.fire({
@@ -83,6 +83,10 @@ const handleDeleteStudents = (value) => {
     icon: 'warning',
     confirmButtonText: 'OK'
   })
+
+  const response = await postData(apiaddress+'/get-students-list',{class1:classes1[document.getElementById('classn').value].class,section1:classes1[document.getElementById('classn').value].section});
+  setData(response);
+
   
   };
 

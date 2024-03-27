@@ -15,6 +15,7 @@ import CardFooter from 'components/Card/CardFooter';
 import { apiaddress } from 'auth/apiaddress';
 import { postData } from 'auth/datapost';
 import { hashit } from 'auth/datapost';
+import Swal from 'sweetalert2';
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -72,9 +73,26 @@ dashboardRoutes.map((route) => {
 });
 const password2 = hashit(employee_number,password)
 let userdata = {employee_number,employee_full_name,employee_mobile_number,father_full_name,father_mobile_number,joining_date,email,cnic,password:password2,emp_token:password2}
-await postData(apiaddress+'/add-user',{userdata,permissionsarray})
-window.location.href = '/admin/adduser';
+const resp = await postData(apiaddress+'/add-user',{userdata,permissionsarray})
+if(resp.error === true){
+  Swal.fire({
+    title: 'User Already Exist!',
+    text: 'Do you want to continue',
+    icon: 'warning',
+    confirmButtonText: 'OK'
+  })
+}else{
+  Swal.fire({
+    title: 'User Added Successfully!',
+    text: 'Do you want to continue',
+    icon: 'success',
+    confirmButtonText: 'OK'
+  })
+  setTimeout(() => {
+    window.location.href = '/admin/adduser';
+  }, 3000);
 
+}
 }
 
 
