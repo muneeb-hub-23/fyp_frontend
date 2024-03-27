@@ -15,6 +15,7 @@ import CardFooter from "components/Card/CardFooter.js";
 import CancelIcon from '@material-ui/icons/Cancel';
 import { apiaddress } from 'auth/apiaddress';
 import { postData } from 'auth/datapost';
+import Swal from 'sweetalert2';
 
 const styles = {
   cardCategoryWhite: {
@@ -106,17 +107,23 @@ const ApiCaller = async (props) => {
   try {
     const response = await postData(apiaddress+'/add-student',props);
     console.log(response);
-    const res2 = await postData(apiaddress+'/get-classes',{data:true})
-    setClasses(res2)
+    // const res1 = await postData(apiaddress+'/get-special-classes',{number:user})
+    // setClasses(res1)
   } catch (error) {
     console.log(error);
   }
 
 };
-const handleSubmit = (e) => {
-  //document.getElementById('errormessage').classList.toggle('msgboxshow')
-  e.preventDefault();
-ApiCaller(formData);
+const handleSubmit = async (e) => {
+e.preventDefault();
+const response = await postData(apiaddress+'/add-student',formData);
+if(response.error === false){
+Swal.fire({
+  title: 'Student Added!',
+  text: 'Do you want to continue',
+  icon: 'success',
+  confirmButtonText: 'OK'
+})
   setFormData({
     admission_number: '',
     roll_no: '',
@@ -132,7 +139,14 @@ ApiCaller(formData);
     father_full_name: '',
     father_mobile_number: '',
   });
-
+}else if(response.error === true){
+  Swal.fire({
+    title: 'Error!',
+    text: response.msg,
+    icon: 'error',
+    confirmButtonText: 'OK'
+  })
+}
 
 
 };

@@ -27,7 +27,8 @@
     "react-router-dom": "5.2.0",
     "react-scripts": "3.4.1",
     "react-sidebar": "^3.0.2",
-    "react-swipeable-views": "0.13.9"
+    "react-swipeable-views": "0.13.9",
+    "sweetalert2": "^11.10.7"
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",

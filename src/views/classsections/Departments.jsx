@@ -8,7 +8,7 @@ import CardBody from "components/Card/CardBody.js";
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { apiaddress } from 'auth/apiaddress';
 import { postData } from 'auth/datapost';
-
+import Swal from 'sweetalert2';
 
 const Departments = () => {
 
@@ -30,10 +30,21 @@ const addthisdepartment = async () => {
 
     let newdepartment = document.getElementById('newdepartment').value
     if(newdepartment.length === 0){
-      alert('please fill the input box')
+      Swal.fire({
+        title: 'Please Fill The Input First!',
+        text: 'Do you want to continue',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      })
     }else{
       
       await postData(apiaddress+'/add-new-department',{newdepartment})
+      Swal.fire({
+        title: 'Department Added!',
+        text: 'Do you want to continue',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      })
       await ApiCaller2()
       document.getElementById('newdepartment').value = ''
     }
@@ -41,6 +52,12 @@ const addthisdepartment = async () => {
 const deletethisdepartment = async (deletedepartment) => {
 
   await postData(apiaddress+'/delete-that-department',{deletedepartment})
+  Swal.fire({
+    title: 'Department Deleted!',
+    text: 'Do you want to continue',
+    icon: 'warning',
+    confirmButtonText: 'OK'
+  })
   await ApiCaller2()
 
 }

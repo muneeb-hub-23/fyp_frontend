@@ -7,6 +7,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import { postData } from 'auth/datapost';
+import Swal from 'sweetalert2';
 
 
 
@@ -146,6 +147,15 @@ function reverseformatDate(inputDate) {
        ApiCaller2([adn,status]);
     if (index < students.length - 1) {
       setIndex(prevIndex => prevIndex + 1);
+    }else{
+      Swal.fire({
+        title: 'Attendance Marked!',
+        text: 'Do you want to continue',
+        icon: 'success',
+        confirmButtonText: 'Continue'
+      })
+
+
     }
   };
 

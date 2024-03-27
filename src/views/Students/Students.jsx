@@ -8,6 +8,7 @@ import CardBody from "components/Card/CardBody.js";
 import bgimg from '../../assets/img/addstudent.png'
 import bgimg2 from '../../assets/img/modifystudent.png'
 import bgimg3 from '../../assets/img/deletestudent.jpg'
+import bgimg4 from '../../assets/img/promotestudents.png'
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { apiaddress } from "auth/apiaddress";
 import { postData } from "auth/datapost";
@@ -27,7 +28,7 @@ export default function Students() {
   
     return count;
   }
-  const [perm,setperm] = useState({a:false,b:false,c:false})
+  const [perm,setperm] = useState({a:false,b:false,c:false,d:false})
   const caller = async () => {
     const usern = localStorage.getItem('username')
     const res = await postData(apiaddress+'/get-permissions',{usern})
@@ -40,6 +41,9 @@ export default function Students() {
     }
     if(countStringOccurrences(res,'deletestudent')===1){
       setperm(prevPerm => ({ ...prevPerm, c: true }));
+    }
+    if(countStringOccurrences(res,'promotestudents')===1){
+      setperm(prevPerm => ({ ...prevPerm, d: true }));
     }
 
     
@@ -94,6 +98,24 @@ export default function Students() {
             </CardHeader>
             <CardBody>
               <h4 className={classes.cardTitle}>Delete Students</h4>
+            </CardBody>
+          </Card>
+          </Link>
+
+        </GridItem>
+):('')}
+
+{perm.d?(
+        <GridItem xs={12} sm={12} md={4}>
+        <Link to="/admin/promotestudents">
+
+          <Card chart>
+            <CardHeader color="danger">
+            <img src={bgimg4} style={{width:'100%',height:'50%'}}/>
+
+            </CardHeader>
+            <CardBody>
+              <h4 className={classes.cardTitle}>Promote Students</h4>
             </CardBody>
           </Card>
           </Link>

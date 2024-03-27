@@ -8,7 +8,7 @@ import CardBody from "components/Card/CardBody.js";
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { apiaddress } from 'auth/apiaddress';
 import { postData } from 'auth/datapost';
-
+import Swal from 'sweetalert2';
 
 const Shifts = () => {
 
@@ -30,10 +30,21 @@ const addthisshift = async () => {
 
     let newshift = document.getElementById('newshift').value
     if(newshift.length === 0){
-      alert('please fill the input box')
+      Swal.fire({
+        title: 'Please Fill The Input First!',
+        text: 'Do you want to continue',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      })
     }else{
 
       await postData(apiaddress+'/add-new-shift',{newshift})
+      Swal.fire({
+        title: 'Shift Added!',
+        text: 'Do you want to continue',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      })
       await ApiCaller2()
       document.getElementById('newshift').value = ''
     }
@@ -41,6 +52,12 @@ const addthisshift = async () => {
 const deletethisshift = async (deleteshift) => {
 
   await postData(apiaddress+'/delete-that-shift',{deleteshift})
+  Swal.fire({
+    title: 'Section Deleted!',
+    text: 'Do you want to continue',
+    icon: 'warning',
+    confirmButtonText: 'OK'
+  })
   await ApiCaller2()
 
 }

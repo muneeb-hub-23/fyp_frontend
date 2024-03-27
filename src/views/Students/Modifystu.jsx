@@ -14,6 +14,7 @@ import CardFooter from "components/Card/CardFooter.js";
 import CancelIcon from '@material-ui/icons/Cancel';
 import { apiaddress } from 'auth/apiaddress';
 import { postData } from 'auth/datapost';
+import Swal from 'sweetalert2';
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -118,6 +119,12 @@ const ApiCaller = async (props) => {
   try {
     const response = await postData(apiaddress+'/update-student',props);
     console.log(response);
+    Swal.fire({
+      title: 'Student Modified!',
+      text: 'Do you want to continue',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    })
     const res1 = await postData(apiaddress+'/get-special-classes',{number:user})
     setClasses(res1)
   } catch (error) {
@@ -129,7 +136,7 @@ const handleSubmit = async (e) => {
   //document.getElementById('errormessage').classList.toggle('msgboxshow')
   e.preventDefault();
 await ApiCaller(formData);
-window.location.href = '/admin/modifystudent'
+
 return
 
 
@@ -175,6 +182,7 @@ return
                     labelText="Roll No"
                     id="rollnumber"
                     formControlProps={{
+                      disabled:true,
                       fullWidth: true
                     }}
                     inputProps={{

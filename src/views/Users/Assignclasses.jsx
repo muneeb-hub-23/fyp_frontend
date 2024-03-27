@@ -43,19 +43,58 @@ const [employees,setEmployees] = useState([])
 const [selectedValue, setSelectedValue] = useState({classn:'1st-year',section:'a',employee_number:0,employee_full_name:''});
 const [assignedclasses,setassignedclasses] = useState([])
 const handleDropdownChange = async (event) => {
-    try{
+    const a = document.getElementById('classn').value
+    const b = document.getElementById('section').value
+    const c = document.getElementById('employeename').value
+    const d = document.getElementById('employee').value
+
     setSelectedValue({
-      classn:document.getElementById('classn').value,
-      section:document.getElementById('section').value,
-      employee_full_name:document.getElementById('employeename').value,
-      employee_number:document.getElementById('employee').value
+      classn:a,
+      section:b,
+      employee_full_name:c,
+      employee_number:d
     });
-    return
-}catch(err){
-    console.log(err)
-    return
-}
+
 };
+const handleidchange = async (event) =>{
+  const a = document.getElementById('classn').value
+  const b = document.getElementById('section').value
+  var c = document.getElementById('employeename').value
+  const d = document.getElementById('employee').value
+
+  for(var l=0; l<employees.length; l++){
+    if(employees[l].employee_number === d){
+      c = employees[l].employee_full_name
+    }
+  }
+
+  setSelectedValue({
+    classn:a,
+    section:b,
+    employee_full_name:c,
+    employee_number:d
+  });
+}
+const handlenamechange = async (event) =>{
+
+  const a = document.getElementById('classn').value
+  const b = document.getElementById('section').value
+  const c = document.getElementById('employeename').value
+  var d = document.getElementById('employee').value
+
+  for(var l=0; l<employees.length; l++){
+    if(employees[l].employee_full_name === c){
+      d = employees[l].employee_number
+    }
+  }
+
+  setSelectedValue({
+    classn:a,
+    section:b,
+    employee_full_name:c,
+    employee_number:d
+  }); 
+}
 const ApiCaller = async (props) => {
 
   try {
@@ -96,13 +135,13 @@ useEffect(()=>{
 <GridContainer justify="center" alignItems="center" spacing={1}>
 
                 <GridItem  xs={12} sm={6} md={3}>
-                <select className='myselectdropdown' id="employee" value={selectedValue.employee_number} onChange={handleDropdownChange}>
+                <select className='myselectdropdown' id="employee" value={selectedValue.employee_number} onChange={handleidchange}>
                 {employees.map((employee)=>(<option value={employee.employee_number}>{employee.employee_number}</option>))}
                 </select>
                 </GridItem>
 
                 <GridItem  xs={12} sm={6} md={3}>
-                <select className='myselectdropdown' id="employeename" value={selectedValue.employee_full_name} onChange={handleDropdownChange}>
+                <select className='myselectdropdown' id="employeename" value={selectedValue.employee_full_name} onChange={handlenamechange}>
                 {employees.map((employee)=>(<option value={employee.employee_full_name}>{employee.employee_full_name}</option>))}
                 </select>
                 </GridItem>

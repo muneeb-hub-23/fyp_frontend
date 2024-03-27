@@ -8,7 +8,7 @@ import CardBody from "components/Card/CardBody.js";
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { apiaddress } from 'auth/apiaddress';
 import { postData } from 'auth/datapost';
-
+import Swal from 'sweetalert2';
 
 const Classes = () => {
 
@@ -30,10 +30,21 @@ const addthisclass = async () => {
 
     let newclass = document.getElementById('newclass').value
     if(newclass.length === 0){
-      alert('please fill the input box')
+      Swal.fire({
+        title: 'Please Fill The Input First!',
+        text: 'Do you want to continue',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      })
     }else{
       
       await postData(apiaddress+'/add-new-class',{newclass})
+      Swal.fire({
+        title: 'Class Added!',
+        text: 'Do you want to continue',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      })
       await ApiCaller2()
       document.getElementById('newclass').value = ''
     }
@@ -41,6 +52,12 @@ const addthisclass = async () => {
 const deletethisclass = async (deleteclass) => {
 
   await postData(apiaddress+'/delete-that-class',{deleteclass})
+  Swal.fire({
+    title: 'Class Deleted!',
+    text: 'Do you want to continue',
+    icon: 'warning',
+    confirmButtonText: 'OK'
+  })
   await ApiCaller2()
 
 }

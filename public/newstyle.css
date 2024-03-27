@@ -192,3 +192,14 @@ width: 28%;
     display: inline-block;
     width: 40%;
 }
+#promotebutton{
+    background-color: rgb(0, 172, 193);
+    color: white;
+    font-weight: bold;
+    margin: 0px auto;
+    height: 50px;
+    width: 150px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

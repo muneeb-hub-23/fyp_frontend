@@ -64,6 +64,7 @@ import DashboarddReport from "views/Dashboard/DashboarddReport";
 import Classfines from "views/Fines/Classfines";
 import Departmentfines from "views/Fines/Departmentfines";
 import View from "views/Dashboard/View";
+import Promotestudents from "views/Students/Promotestudents";
 
 const dashboardRoutes = [
   {
@@ -381,6 +382,15 @@ const dashboardRoutes = [
     icon: SupervisedUserCircleIcon,
     component: Students,
     visible:true,
+    layout: "/admin"
+  },
+  {
+    path: "/promotestudents",
+    name: "Promote Students",
+    rtlName: "promotestudents",
+    icon: SupervisedUserCircleIcon,
+    component: Promotestudents,
+    visible:false,
     layout: "/admin"
   },
   {

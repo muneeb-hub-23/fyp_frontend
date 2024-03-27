@@ -58,21 +58,17 @@ const [classsections,setclasssections] = useState([])
       setclasssections(restx)
       const response0 = await postData(apiaddress+'/today-ict-strength', {shift:document.getElementById('shift').value});
       setTStrength(response0)
-
       const response1 = await postData(apiaddress+'/today-ict-present', {shift:document.getElementById('shift').value});
       setPresent(response1)
-
       const response2 = await postData(apiaddress+'/today-ict-absent', {shift:document.getElementById('shift').value});
       setAbsent(response2)
-
       const response3 = await postData(apiaddress+'/today-ict-leave', {shift:document.getElementById('shift').value});
       setLeave(response3)
-
       const response4 = await postData(apiaddress+'/today-ict-lates', {shift:document.getElementById('shift').value});
       setlates(response4)
-   
       const response5 = await postData(apiaddress+'/dashboard-charts', {classsections:restx});
       setData(response5)
+
   
       return
     }catch (err){
