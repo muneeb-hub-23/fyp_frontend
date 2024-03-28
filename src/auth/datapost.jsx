@@ -22,13 +22,16 @@ const postDatax = async (url, data) => {
     console.error('Error:', error.message);
   }
 }
+
 const username = localStorage.getItem('user')
 const token = localStorage.getItem('username')
+
 export const postData = async (url, data) => {
     try {
-   
+
       await postDatax(apiaddress+'/write-logs',{username,token,path:url,activity:JSON.stringify(data)})
       data.token = token
+
       const response = await fetch(url, {
         method: 'POST',
         headers: {

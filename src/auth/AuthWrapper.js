@@ -23,7 +23,7 @@ export const AuthWrapper = () => {
           const token = hashit(userName,password)
           return new Promise(async (resolve, reject) => {
 
-          const getdata = await postData(apiaddress+'/match-user',{userName:token})
+               const getdata = await postData(apiaddress+'/match-user',{userName:token})
           
                if (userName === getdata.employee_number & token === getdata.emp_token) {
                     localStorage.setItem('user',getdata.employee_full_name)
@@ -62,19 +62,9 @@ export const AuthWrapper = () => {
           getperm()
           },[])
 
-if(localStorage.getItem('username').length === 64){
 
-     return (
-               <AuthContext.Provider value={{user,permissions, login, logout}}>
-                    <Switch>
-                 
-                    {privateroutes}
-               
-                    </Switch>
-              </AuthContext.Provider>
 
-     )
-}else{
+if(typeof(localStorage.getItem('username')) === 'object'){
      return (
           <AuthContext.Provider value={{user, login, logout}}>
                <Switch>
@@ -85,7 +75,48 @@ if(localStorage.getItem('username').length === 64){
          </AuthContext.Provider>
 
 )  
+
+}else if(localStorage.getItem('username') === 'null'){
+
+     return (
+          <AuthContext.Provider value={{user, login, logout}}>
+               <Switch>
+
+               {publicroutes}
+              
+               </Switch>
+         </AuthContext.Provider>
+
+) 
+
+}else if(localStorage.getItem('username').length === 64){
+ 
+return (
+     <AuthContext.Provider value={{user,permissions, login, logout}}>
+          <Switch>
+       
+          {privateroutes}
+     
+          </Switch>
+    </AuthContext.Provider>
+
+)
+
+}else{
+
+     return (
+          <AuthContext.Provider value={{user, login, logout}}>
+               <Switch>
+
+               {publicroutes}
+              
+               </Switch>
+         </AuthContext.Provider>
+
+) 
 }
 
 }
+
+
 
