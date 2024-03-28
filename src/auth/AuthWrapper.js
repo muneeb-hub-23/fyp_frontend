@@ -64,7 +64,7 @@ export const AuthWrapper = () => {
 
 
 
-if(typeof(localStorage.getItem('username')) === 'object'){
+if(typeof(localStorage.getItem('username')) === 'object' | localStorage.getItem('username')==='null'){
      return (
           <AuthContext.Provider value={{user, login, logout}}>
                <Switch>
@@ -75,19 +75,6 @@ if(typeof(localStorage.getItem('username')) === 'object'){
          </AuthContext.Provider>
 
 )  
-
-}else if(localStorage.getItem('username') === 'null'){
-
-     return (
-          <AuthContext.Provider value={{user, login, logout}}>
-               <Switch>
-
-               {publicroutes}
-              
-               </Switch>
-         </AuthContext.Provider>
-
-) 
 
 }else if(localStorage.getItem('username').length === 64){
  
@@ -102,19 +89,20 @@ return (
 
 )
 
-}else{
-
-     return (
-          <AuthContext.Provider value={{user, login, logout}}>
-               <Switch>
-
-               {publicroutes}
-              
-               </Switch>
-         </AuthContext.Provider>
-
-) 
 }
+// else{
+
+//      return (
+//           <AuthContext.Provider value={{user, login, logout}}>
+//                <Switch>
+
+//                {publicroutes}
+              
+//                </Switch>
+//          </AuthContext.Provider>
+
+// ) 
+// }
 
 }
 
